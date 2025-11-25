@@ -34,9 +34,7 @@ return new class extends Migration
             $table->integer('stock')->default(0);
             $table->enum('stock_status', ['in_stock', 'out_of_stock'])->default('in_stock')->index();
 
-            $table->boolean('is_featured')->default(false)->index();
-            $table->boolean('is_bestseller')->default(false)->index();
-
+            $table->boolean('is_featured')->default(false)->index();    
             $table->integer('order_by')->nullable();
 
             // SEO fields

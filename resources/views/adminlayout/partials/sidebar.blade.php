@@ -130,7 +130,7 @@
                             <ul class="sub-menu list-unstyled">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="product-list.html" title="Product List">Products</a>
+                                        href="{{ route('admin.product') }}" title="Product List">Products</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
@@ -144,6 +144,10 @@
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
                                         href="{{ route('admin.attribute') }}" title="Categoried">Attributes</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
+                                        href="{{ route('admin.variant') }}" title="Categoried">Variants</a>
                                 </li>
                             </ul>
                         </div>

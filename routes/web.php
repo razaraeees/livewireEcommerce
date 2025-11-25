@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\VariantController;
 use App\Livewire\Admin\Banner\BannerCreate;
 use App\Livewire\Admin\Banner\Bannerpage;
 use App\Models\Category;
@@ -50,6 +52,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/attribute/edit/{slug}', 'edit')->name('attribute.edit');
     });
 
+    Route::controller(VariantController::class)->group(function(){
+        Route::get('/variant', 'index')->name('variant');
+        Route::get('/variant/create', 'create')->name('variant.create');
+        Route::get('/variant/edit/{slug}', 'edit')->name('variant.edit');
+    });
+
+    Route::controller(ProductController::class)->group(function(){
+        Route::get('/product', 'index')->name('product');
+        Route::get('/product/create', 'create')->name('product.create');
+        Route::get('/product/edit/{slug}', 'edit')->name('product.edit');
+    });
     
    
 });

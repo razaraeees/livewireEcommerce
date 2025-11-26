@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AttributeValue extends Model
 {
@@ -12,4 +13,13 @@ class AttributeValue extends Model
         'status',
         'color_code',
     ];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+
+    public function attribute(): BelongsTo
+    {
+        return $this->belongsTo(Attribute::class);
+    }
 }

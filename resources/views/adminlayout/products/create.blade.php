@@ -1,5 +1,5 @@
-@extends('adminlayout.layout')
+    @extends('adminlayout.layout')
 
-@section('content')
-    @livewire('admin.products.products-create')
-@endsection
+    @section('content')
+        @livewire('admin.products.products-create')
+    @endsection

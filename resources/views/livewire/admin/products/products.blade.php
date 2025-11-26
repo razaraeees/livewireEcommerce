@@ -93,9 +93,9 @@
                                                 @if($item->product_code)
                                                     <small class="text-muted">Code: {{ $item->product_code }}</small>
                                                 @endif
-                                                @if($item->theme)
+                                                {{-- @if($item->theme)
                                                     <br><span class="badge bg-info mt-1" style="font-size: 10px;">{{ ucfirst($item->theme) }}</span>
-                                                @endif
+                                                @endif --}}
                                             </div>
                                         </div>
                                     </td>
@@ -110,7 +110,7 @@
 
                                     <td>
                                         @if($item->brand)
-                                            <span class="badge bg-light text-dark">{{ $item->brand->brand_name }}</span>
+                                            <span class="badge bg-light text-dark">{{ $item->brand->name }}</span>
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
@@ -124,7 +124,7 @@
                                     </td>
 
                                     <td>
-                                        <span class="badge rounded-pill py-2 px-3 
+                                        <span class="rounded-pill py-2 px-3 
                                             alert-{{ $item->stock > 0 ? 'success' : 'danger' }} border-0 fs-12">
                                             {{ $item->stock ?? 0 }}
                                         </span>
@@ -132,7 +132,7 @@
 
                                     <td>
                                         <span class="badge rounded-pill py-2 px-3 alert-primary border-0 fs-12">
-                                            {{ $item->variants->count() }}
+                                            {{-- {{ $item->variants->count() }} --}}
                                         </span>
                                     </td>
 

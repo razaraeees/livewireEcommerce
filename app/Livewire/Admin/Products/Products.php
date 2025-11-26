@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Admin\Products;
 
-use App\Models\Product;
-use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\ProductVariantValue;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Storage;
 
 class Products extends Component
 {
@@ -15,10 +17,13 @@ class Products extends Component
 
     // Public properties for filters
     public $search = '';
+
     public $filterStatus = '';
+
     public $filterCategory = '';
+
     public $filterBrand = '';
-    
+
     protected $paginationTheme = 'bootstrap';
 
     // Reset pagination when filters change
@@ -56,11 +61,11 @@ class Products extends Component
     public function toggleStatus($slug)
     {
         $product = Product::where('product_slug', $slug)->firstOrFail();
-        $product->update(['status' => !$product->status]);
-        
+        $product->update(['status' => ! $product->status]);
+
         $this->dispatch('alert', [
             'type' => 'success',
-            'message' => 'Product status updated successfully!'
+            'message' => 'Product status updated successfully!',
         ]);
     }
 
@@ -68,11 +73,11 @@ class Products extends Component
     public function toggleFeatured($slug)
     {
         $product = Product::where('product_slug', $slug)->firstOrFail();
-        $product->update(['is_featured' => !$product->is_featured]);
-        
+        $product->update(['is_featured' => ! $product->is_featured]);
+
         $this->dispatch('alert', [
             'type' => 'success',
-            'message' => 'Product featured status updated successfully!'
+            'message' => 'Product featured status updated successfully!',
         ]);
     }
 
@@ -80,12 +85,12 @@ class Products extends Component
     public function deleteProduct($slug)
     {
         $product = Product::where('product_slug', $slug)->firstOrFail();
-        
+
         // Delete thumbnail image
         if ($product->thumbnail_image && Storage::disk('public')->exists($product->thumbnail_image)) {
             Storage::disk('public')->delete($product->thumbnail_image);
         }
-        
+
         // Delete gallery images
         if ($product->images) {
             $images = json_decode($product->images, true);
@@ -97,7 +102,7 @@ class Products extends Component
                 }
             }
         }
-        
+
         // Delete variants and their images
         if ($product->variants) {
             foreach ($product->variants as $variant) {
@@ -105,19 +110,58 @@ class Products extends Component
                 if ($variant->image && Storage::disk('public')->exists($variant->image)) {
                     Storage::disk('public')->delete($variant->image);
                 }
-                
+
                 // Delete variant
                 $variant->delete();
             }
         }
-        
+
         // Finally delete the product
         $product->delete();
-        
+
         $this->dispatch('alert', [
             'type' => 'success',
-            'message' => 'Product deleted successfully!'
+            'message' => 'Product deleted successfully!',
         ]);
+    }
+
+    public function delete($id)
+    {
+        $product = Product::with([
+            'variants.images', // Load variants + their images
+            'images',           // Load product gallery images
+        ])->findOrFail($id);
+
+        // === Step 1: Delete Product Variant Images (physical + DB) ===
+        foreach ($product->variants as $variant) {
+            // Delete physical files of variant images
+            foreach ($variant->images as $image) {
+                if ($image->image && Storage::disk('public')->exists($image->image)) {
+                    Storage::disk('public')->delete($image->image);
+                }
+                $image->delete(); // Permanent delete from DB
+            }
+
+            // Delete variant values
+            ProductVariantValue::where('product_variant_id', $variant->id)->delete();
+        }
+
+        // === Step 2: Delete Product Variants ===
+        ProductVariant::where('product_id', $product->id)->delete();
+
+        // === Step 3: Delete Product Gallery Images (physical + DB) ===
+        foreach ($product->images as $image) {
+            if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
+                Storage::disk('public')->delete($image->image_path);
+            }
+            $image->delete();
+        }
+
+        // === Step 4: Soft delete the main product ===
+        $product->delete(); // This soft-deletes the product
+
+        $this->dispatch('show-toast', type: 'success', message: 'Product deleted successfully!');
+
     }
 
     public function render()
@@ -125,7 +169,7 @@ class Products extends Component
         $products = Product::query()
             ->when($this->search, function ($query) {
                 $query->whereRaw(
-                    "MATCH(product_name, product_code) AGAINST(? IN NATURAL LANGUAGE MODE)", 
+                    'MATCH(product_name, product_code) AGAINST(? IN NATURAL LANGUAGE MODE)',
                     [$this->search]
                 );
             })
@@ -138,7 +182,7 @@ class Products extends Component
             ->when($this->filterBrand, function ($query) {
                 $query->where('brand_id', $this->filterBrand);
             })
-            ->with(['category', 'brand', 'variants'])
+            ->with(['category', 'brand'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -148,7 +192,7 @@ class Products extends Component
         return view('livewire.admin.products.products', [
             'products' => $products,
             'categories' => $categories,
-            'brands' => $brands
+            'brands' => $brands,
         ]);
     }
 }

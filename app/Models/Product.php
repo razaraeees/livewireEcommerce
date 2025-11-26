@@ -12,7 +12,6 @@ class Product extends Model
         'product_name',
         'product_slug',
         'product_code',
-        'product_color',
         'product_price',
         'product_discount',
         'product_weight',
@@ -45,11 +44,13 @@ class Product extends Model
         return $this->hasMany(ProductImages::class);
     }
 
-    // Product variants
-    // public function variants()
-    // {
-    //     return $this->hasMany(ProductVariantImages::class);
-    // }
+    // Product.php
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+    
+
 
 
 }

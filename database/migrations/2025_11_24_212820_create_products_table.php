@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('product_code')->unique();  // auto indexed
 
             $table->string('product_color')->nullable();
-            $table->decimal('product_price', 10, 2)->default(0);
-            $table->decimal('product_discount', 10, 2)->default(0);
+            $table->decimal('product_price', 10, 2)->default(0)->nullable();
+            $table->decimal('product_discount', 10, 2)->default(0)->nullable();
 
             $table->integer('product_weight')->nullable();
             $table->string('thumbnail_image')->nullable();

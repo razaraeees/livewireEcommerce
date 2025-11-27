@@ -38,7 +38,7 @@
                         <select wire:model.live="filterBrand" class="form-control bg-input border-0">
                             <option value="">All Brands</option>
                             @foreach($brands as $brand)
-                                <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
+                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -61,7 +61,7 @@
                                 <th>Brand</th>
                                 <th>Price</th>
                                 <th>Stock</th>
-                                <th>Variants</th>
+                                {{-- <th>Variants</th> --}}
                                 <th>Status</th>
                                 <th>Featured</th>
                                 <th>Created At</th>
@@ -127,12 +127,6 @@
                                         <span class="rounded-pill py-2 px-3 
                                             alert-{{ $item->stock > 0 ? 'success' : 'danger' }} border-0 fs-12">
                                             {{ $item->stock ?? 0 }}
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="badge rounded-pill py-2 px-3 alert-primary border-0 fs-12">
-                                            {{-- {{ $item->variants->count() }} --}}
                                         </span>
                                     </td>
 

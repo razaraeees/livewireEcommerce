@@ -1,39 +1,36 @@
 <div x-data="{
-    name: '',
-    slug: '',
+    name: @entangle('product_name'),
+    slug: @entangle('product_slug'),
     generateSlug() {
         this.slug = this.name.toLowerCase()
             .replace(/ /g, '-')
             .replace(/[^\w-]+/g, '');
-        $wire.set('product_slug', this.slug);
     }
-}" x-init="$watch('name', value => value && generateSlug())">
+}">
     <div class="dashboard-page-content">
 
-        <form wire:submit.prevent="store">
+        <form wire:submit.prevent="update">
 
             <div class="row mb-9 align-items-center">
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-sm-6 mb-8 mb-sm-0">
-                            <h2 class="fs-4 mb-0">Add New Product</h2>
+                            <h2 class="fs-4 mb-0">Edit Product</h2>
+                            <p class="text-muted small mb-0">Update product information</p>
                         </div>
 
                         <div class="col-sm-6 d-flex flex-wrap justify-content-sm-end">
-                            <button type="button" wire:click="saveDraft" class="btn btn-outline-primary me-4"
-                                wire:loading.attr="disabled">
-                                <span wire:loading.remove wire:target="saveDraft">Save to draft</span>
-                                <span wire:loading wire:target="saveDraft">
-                                    <span class="spinner-border spinner-border-sm me-2"></span>
-                                    Saving...
-                                </span>
-                            </button>
+                            <a href="{{ route('admin.product') }}" class="btn btn-outline-secondary me-4">
+                                <i class="far fa-arrow-left me-2"></i> Back to Products
+                            </a>
 
                             <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
-                                <span wire:loading.remove wire:target="store">Publish</span>
-                                <span wire:loading wire:target="store">
+                                <span wire:loading.remove wire:target="update">
+                                    <i class="far fa-save me-2"></i> Update Product
+                                </span>
+                                <span wire:loading wire:target="update">
                                     <span class="spinner-border spinner-border-sm me-2"></span>
-                                    Publishing...
+                                    Updating...
                                 </span>
                             </button>
                         </div>
@@ -83,7 +80,24 @@
                                             </div>
                                         </div>
 
-                                        @livewire('admin.categories.categories-tree-drop')
+                                        <!-- Category -->
+                                        <div class="col-lg-6">
+                                            <div class="mb-8">
+                                                <label class="mb-4 fs-13px ls-1 fw-bold text-uppercase">
+                                                    Category <span class="text-danger">*</span>
+                                                </label>
+                                                <select wire:model="category_id" class="form-control" required>
+                                                    <option value="">Select Category</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}">
+                                                            {{ $category->category_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('category_id')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
 
                                         <!-- Brand -->
                                         <div class="col-lg-6">
@@ -108,14 +122,10 @@
                                         <div class="col-lg-4">
                                             <div class="mb-8">
                                                 <label class="mb-4 fs-13px ls-1 fw-bold text-uppercase">
-                                                    Product Code <span class="text-danger">*</span>
+                                                    Product Code
                                                 </label>
                                                 <input type="text" wire:model="product_code" class="form-control"
                                                     placeholder="e.g., PRD-001">
-                                                @error('product_code')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-
                                             </div>
                                         </div>
 
@@ -150,9 +160,8 @@
                                                 <label class="mb-4 fs-13px ls-1 fw-bold text-uppercase">
                                                     Discount (%)
                                                 </label>
-                                                <input type="number" wire:model="product_discount"
-                                                    class="form-control" placeholder="0" min="0"
-                                                    max="100" step="0.01">
+                                                <input type="number" wire:model="product_discount" class="form-control"
+                                                    placeholder="0" min="0" max="100" step="0.01">
                                             </div>
                                         </div>
 
@@ -176,7 +185,6 @@
                                                 <select wire:model="stock_status" class="form-control">
                                                     <option value="in_stock">In Stock</option>
                                                     <option value="out_of_stock">Out of Stock</option>
-                                                    {{-- <option value="pre_order">Pre Order</option> --}}
                                                 </select>
                                             </div>
                                         </div>
@@ -205,7 +213,6 @@
                                 </div>
                             </div>
 
-                            <!-- NEW: Variant Selection System -->
                             <!-- Variant Selection System -->
                             <div class="card mb-8 rounded-4">
                                 <div class="card-header p-7 bg-transparent">
@@ -242,33 +249,12 @@
                                                                 );
                                                             @endphp
                                                             @if ($currentVariant)
-                                                                <label class="form-label fw-bold">
-                                                                    Select Values for
-                                                                    <strong>{{ $currentVariant->name }}</strong>
-                                                                </label>
+                                                                <label class="form-label fw-bold">Select Values for
+                                                                    <strong>{{ $currentVariant->name }}</strong></label>
                                                                 <div class="d-flex flex-wrap gap-2">
                                                                     @foreach ($currentVariant->variantValues as $value)
-                                                                        @php
-                                                                            $isChecked =
-                                                                                isset(
-                                                                                    $selectedVariantValues[
-                                                                                        $currentVariant->id
-                                                                                    ],
-                                                                                ) &&
-                                                                                is_array(
-                                                                                    $selectedVariantValues[
-                                                                                        $currentVariant->id
-                                                                                    ],
-                                                                                ) &&
-                                                                                in_array(
-                                                                                    $value->id,
-                                                                                    $selectedVariantValues[
-                                                                                        $currentVariant->id
-                                                                                    ],
-                                                                                );
-                                                                        @endphp
                                                                         <label
-                                                                            class="btn btn-sm {{ $isChecked ? 'btn-primary' : 'btn-outline-primary' }}"
+                                                                            class="btn btn-sm {{ isset($selectedVariantValues[$currentVariant->id]) && in_array($value->id, $selectedVariantValues[$currentVariant->id] ?? []) ? 'btn-primary' : 'btn-outline-primary' }}"
                                                                             style="cursor: pointer;">
                                                                             <input type="checkbox"
                                                                                 wire:model.live="selectedVariantValues.{{ $currentVariant->id }}"
@@ -286,9 +272,9 @@
                                                     </div>
 
                                                     <div class="col-md-1 text-end">
-                                                        @if ($key > 0)
+                                                        @if (count($selectedVariants) > 1)
                                                             <button type="button"
-                                                                wire:click.prevent="removeVariantSelection('{{ $key }}')"
+                                                                wire:click="removeVariantSelection('{{ $key }}')"
                                                                 class="btn btn-sm btn-danger mt-4"
                                                                 title="Remove this variant">
                                                                 <i class="far fa-times"></i>
@@ -305,7 +291,6 @@
                                         <i class="far fa-plus me-1"></i> Add Another Variant Type
                                     </button>
 
-                                    {{-- Manual Generate Button (Optional - auto-generates on change) --}}
                                     @if (count($selectedVariantValues) > 0)
                                         <div class="alert alert-info">
                                             <strong><i class="far fa-info-circle me-2"></i>Info:</strong>
@@ -332,6 +317,7 @@
                                     @endif
                                 </div>
                             </div>
+
                             <!-- Generated Variant Combinations -->
                             @if (count($generatedCombinations) > 0)
                                 <div class="card mb-8 rounded-4">
@@ -350,6 +336,11 @@
                                                     <strong class="text-primary">
                                                         <i class="far fa-tag me-2"></i>{{ $combination['label'] }}
                                                     </strong>
+                                                    @if (!empty($combination['variant_id']))
+                                                        <span class="badge bg-success ms-2">Existing</span>
+                                                    @else
+                                                        <span class="badge bg-info ms-2">New</span>
+                                                    @endif
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row">
@@ -360,12 +351,7 @@
                                                                         class="text-danger">*</span></label>
                                                                 <input type="text"
                                                                     wire:model="generatedCombinations.{{ $index }}.sku"
-                                                                    class="form-control @error('generatedCombinations.' . $index . '.sku') is-invalid @enderror"
-                                                                    placeholder="e.g., PROD-001">
-                                                                @error('generatedCombinations.' . $index . '.sku')
-                                                                    <span
-                                                                        class="text-danger small">{{ $message }}</span>
-                                                                @enderror
+                                                                    class="form-control" placeholder="e.g., PROD-001">
                                                             </div>
                                                         </div>
 
@@ -375,12 +361,7 @@
                                                                 <label class="form-label fw-bold">Barcode</label>
                                                                 <input type="text"
                                                                     wire:model="generatedCombinations.{{ $index }}.barcode"
-                                                                    class="form-control @error('generatedCombinations.' . $index . '.barcode') is-invalid @enderror"
-                                                                    placeholder="123456789">
-                                                                @error('generatedCombinations.' . $index . '.barcode')
-                                                                    <span
-                                                                        class="text-danger small">{{ $message }}</span>
-                                                                @enderror
+                                                                    class="form-control" placeholder="123456789">
                                                             </div>
                                                         </div>
 
@@ -391,12 +372,8 @@
                                                                         class="text-danger">*</span></label>
                                                                 <input type="number"
                                                                     wire:model="generatedCombinations.{{ $index }}.price"
-                                                                    class="form-control @error('generatedCombinations.' . $index . '.price') is-invalid @enderror"
-                                                                    placeholder="0.00" step="0.01">
-                                                                @error('generatedCombinations.' . $index . '.price')
-                                                                    <span
-                                                                        class="text-danger small">{{ $message }}</span>
-                                                                @enderror
+                                                                    class="form-control" placeholder="0.00"
+                                                                    step="0.01">
                                                             </div>
                                                         </div>
 
@@ -406,29 +383,18 @@
                                                                 <label class="form-label fw-bold">Sale Price</label>
                                                                 <input type="number"
                                                                     wire:model="generatedCombinations.{{ $index }}.sale_price"
-                                                                    class="form-control @error('generatedCombinations.' . $index . '.sale_price') is-invalid @enderror"
-                                                                    placeholder="0.00" step="0.01">
-                                                                @error('generatedCombinations.' . $index .
-                                                                    '.sale_price')
-                                                                    <span
-                                                                        class="text-danger small">{{ $message }}</span>
-                                                                @enderror
+                                                                    class="form-control" placeholder="0.00"
+                                                                    step="0.01">
                                                             </div>
                                                         </div>
 
                                                         <!-- Stock -->
                                                         <div class="col-lg-4">
                                                             <div class="mb-4">
-                                                                <label class="form-label fw-bold">Stock <span
-                                                                        class="text-danger">*</span></label>
+                                                                <label class="form-label fw-bold">Stock</label>
                                                                 <input type="number"
                                                                     wire:model="generatedCombinations.{{ $index }}.stock"
-                                                                    class="form-control @error('generatedCombinations.' . $index . '.stock') is-invalid @enderror"
-                                                                    placeholder="0" min="0">
-                                                                @error('generatedCombinations.' . $index . '.stock')
-                                                                    <span
-                                                                        class="text-danger small">{{ $message }}</span>
-                                                                @enderror
+                                                                    class="form-control" placeholder="0">
                                                             </div>
                                                         </div>
 
@@ -438,12 +404,8 @@
                                                                 <label class="form-label fw-bold">Weight (kg)</label>
                                                                 <input type="number"
                                                                     wire:model="generatedCombinations.{{ $index }}.weight"
-                                                                    class="form-control @error('generatedCombinations.' . $index . '.weight') is-invalid @enderror"
-                                                                    placeholder="0.00" step="0.01">
-                                                                @error('generatedCombinations.' . $index . '.weight')
-                                                                    <span
-                                                                        class="text-danger small">{{ $message }}</span>
-                                                                @enderror
+                                                                    class="form-control" placeholder="0.00"
+                                                                    step="0.01">
                                                             </div>
                                                         </div>
 
@@ -452,26 +414,46 @@
                                                             <div class="mb-4">
                                                                 <label class="form-check mt-4">
                                                                     <input class="form-check-input" type="checkbox"
-                                                                        wire:model="generatedCombinations.{{ $index }}.status"
-                                                                        checked>
+                                                                        wire:model="generatedCombinations.{{ $index }}.status">
                                                                     <span
                                                                         class="form-check-label fw-bold">Active</span>
                                                                 </label>
                                                             </div>
                                                         </div>
 
-                                                        <!-- Variant Images -->
+                                                        <!-- Existing Variant Images -->
+                                                        @if (isset($combination['existing_images']) && count($combination['existing_images']) > 0)
+                                                            <div class="col-lg-12 mb-3">
+                                                                <label class="form-label fw-bold">
+                                                                    <i class="far fa-images me-1"></i> Existing Images
+                                                                </label>
+                                                                <div class="row">
+                                                                    @foreach ($combination['existing_images'] as $imgKey => $existingImg)
+                                                                        <div class="col-3 mb-2">
+                                                                            <div class="position-relative">
+                                                                                <img src="{{ asset('storage/' . $existingImg['path']) }}"
+                                                                                    class="w-100 rounded border"
+                                                                                    style="height: 80px; object-fit: cover;">
+                                                                                <button type="button"
+                                                                                    wire:click="deleteExistingVariantImage({{ $index }}, {{ $existingImg['id'] }})"
+                                                                                    wire:confirm="Are you sure you want to delete this image?"
+                                                                                    class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1"
+                                                                                    style="padding: 2px 6px; font-size: 10px;">&times;</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
+                                                        <!-- New Variant Images -->
                                                         <div class="col-lg-12 mt-3">
                                                             <label class="form-label fw-bold">
-                                                                <i class="far fa-images me-1"></i> Variant Images
+                                                                <i class="far fa-images me-1"></i> Add New Images
                                                             </label>
                                                             <input type="file"
                                                                 wire:model="generatedCombinations.{{ $index }}.images"
-                                                                class="form-control @error('generatedCombinations.' . $index . '.images.*') is-invalid @enderror"
-                                                                accept="image/*" multiple>
-                                                            @error('generatedCombinations.' . $index . '.images.*')
-                                                                <span class="text-danger small">{{ $message }}</span>
-                                                            @enderror
+                                                                class="form-control" accept="image/*" multiple>
 
                                                             @if (isset($combination['images']) && count($combination['images']) > 0)
                                                                 <div class="row mt-3">
@@ -498,6 +480,7 @@
                                     </div>
                                 </div>
                             @endif
+
                             <!-- SEO Information -->
                             <div class="card mb-8 rounded-4">
                                 <div class="card-header p-7 bg-transparent">
@@ -547,13 +530,12 @@
                                 </div>
                                 <div class="card-body p-7">
 
-                                    <div class="mb-0">
+                                    <div class="mb-8">
                                         <label class="mb-4 fs-13px ls-1 fw-bold text-uppercase">Display Order</label>
                                         <input type="number" wire:model="order_by" class="form-control"
                                             placeholder="0" min="0">
                                         <small class="text-muted">Lower number = higher priority</small>
                                     </div>
-
 
                                     <div class="mb-8">
                                         <label class="form-check">
@@ -564,10 +546,9 @@
                                         </label>
                                     </div>
 
-                                    <div class="mb-4">
+                                    <div class="mb-0">
                                         <label class="form-check">
-                                            <input class="form-check-input" type="checkbox" wire:model="status"
-                                                checked>
+                                            <input class="form-check-input" type="checkbox" wire:model="status">
                                             <span class="form-check-label">
                                                 <i class="far fa-check-circle text-success"></i> Product Active
                                             </span>
@@ -594,6 +575,14 @@
                                                 <button type="button" wire:click="$set('thumbnail_image', null)"
                                                     class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2">&times;</button>
                                             </div>
+                                        @elseif($existing_thumbnail)
+                                            <div class="position-relative">
+                                                <img src="{{ asset('storage/' . $existing_thumbnail) }}"
+                                                    class="w-100 rounded mb-4"
+                                                    style="max-height: 250px; object-fit: cover;">
+                                                <span
+                                                    class="badge bg-success position-absolute top-0 start-0 m-2">Current</span>
+                                            </div>
                                         @else
                                             <img src="{{ asset('assets/images/dashboard/upload.svg') }}"
                                                 width="102" class="d-block mx-auto mb-4">
@@ -613,14 +602,39 @@
                             </div>
 
                             <!-- Product Gallery -->
-                            <div class="card rounded-4">
+                            <div class="card mb-8 rounded-4">
                                 <div class="card-header p-7 bg-transparent">
                                     <h4 class="fs-18px mb-0 font-weight-500">
                                         <i class="far fa-images me-2"></i> Product Gallery
                                     </h4>
                                 </div>
                                 <div class="card-body p-7">
+                                    <!-- Existing Gallery Images -->
+                                    @if (!empty($existing_images) && count($existing_images) > 0)
+                                        <div class="mb-4">
+                                            <label class="form-label fw-bold">Existing Images</label>
+                                            <div class="row">
+                                                @foreach ($existing_images as $existingImage)
+                                                    <div class="col-6 mb-3">
+                                                        <div class="position-relative">
+                                                            <img src="{{ asset('storage/' . $existingImage['image']) }}"
+                                                                class="w-100 rounded border"
+                                                                style="height: 100px; object-fit: cover;">
+                                                            <button type="button"
+                                                                wire:click="deleteExistingImage({{ $existingImage['id'] }})"
+                                                                wire:confirm="Are you sure you want to delete this image?"
+                                                                class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1"
+                                                                style="padding: 2px 6px;">&times;</button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <!-- Upload New Images -->
                                     <div class="input-upload text-center">
+                                        <label class="form-label fw-bold">Add New Images</label>
                                         <input type="file" wire:model="product_images" class="form-control"
                                             accept="image/*" multiple>
                                         <small class="text-muted d-block mt-2">Upload multiple images</small>
@@ -650,9 +664,9 @@
                                 </div>
                             </div>
 
-                            <!-- Product Attributes (Add after Product Gallery in right column) -->
+                            <!-- Product Attributes -->
                             @if (isset($availableAttributes) && $availableAttributes->count() > 0)
-                                <div class="card rounded-4" style="margin-top: 30px">
+                                <div class="card rounded-4">
                                     <div class="card-header p-7 bg-transparent">
                                         <h4 class="fs-18px mb-0 font-weight-500">
                                             <i class="far fa-list-alt me-2"></i> Product Attributes
@@ -672,7 +686,6 @@
                                                             class="form-select">
                                                             <option value="">-- Select Attribute --</option>
                                                             @foreach ($availableAttributes as $attr)
-                                                                {{-- Hide already selected attributes except current --}}
                                                                 @php
                                                                     $isUsed =
                                                                         collect($productAttributes)
@@ -688,7 +701,7 @@
                                                         </select>
                                                     </div>
 
-                                                    <!-- Value Dropdown (shows when attribute selected) -->
+                                                    <!-- Value Dropdown -->
                                                     @if (!empty($attribute['attribute_id']))
                                                         @php
                                                             $selectedAttribute = $availableAttributes->find(
@@ -711,8 +724,7 @@
                                                             </div>
                                                         @else
                                                             <div class="alert alert-warning mb-0">
-                                                                <small>No values available for this attribute. Please
-                                                                    add values first.</small>
+                                                                <small>No values available for this attribute.</small>
                                                             </div>
                                                         @endif
                                                     @endif
@@ -742,31 +754,6 @@
                                             });
                                         @endphp
 
-                                        @if ($validAttributes->count() > 0)
-                                            <div class="alert alert-info mt-3 mb-0">
-                                                <strong class="small">Selected Attributes:</strong>
-                                                <div class="mt-2">
-                                                    @foreach ($validAttributes as $attr)
-                                                        @php
-                                                            $selectedAttr = $availableAttributes->find(
-                                                                $attr['attribute_id'],
-                                                            );
-                                                            $selectedValue =
-                                                                $selectedAttr && $selectedAttr->attributeValues
-                                                                    ? $selectedAttr->attributeValues->find(
-                                                                        $attr['value_id'],
-                                                                    )
-                                                                    : null;
-                                                        @endphp
-                                                        @if ($selectedAttr && $selectedValue)
-                                                            <span class="badge bg-primary me-1 mb-1">
-                                                                {{ $selectedAttr->name }}: {{ $selectedValue->value }}
-                                                            </span>
-                                                        @endif
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        @endif
                                     </div>
                                 </div>
                             @endif

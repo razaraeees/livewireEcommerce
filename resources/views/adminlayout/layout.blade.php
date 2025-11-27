@@ -30,6 +30,7 @@
     @livewireStyles
 </head>
 
+
 <body>
 
     <div class="wrapper dashboard-wrapper">
@@ -83,6 +84,7 @@
     <script src="{{ asset('assets/vendors/gsap/ScrollTrigger.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/mapbox-gl/mapbox-gl.js') }}"></script>
     <script src="{{ asset('assets/js/dashboard.min.js') }}"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         window.addEventListener('show-toast', event => {
@@ -100,6 +102,14 @@
                 position: 'top-end',
                 timer: 3000,
                 showConfirmButton: false
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#category').select2({
+                placeholder: "Select Category",
+                allowClear: true
             });
         });
     </script>

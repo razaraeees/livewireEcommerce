@@ -18,5 +18,10 @@ class ProductController extends Controller
         
         return view('adminlayout.products.create');
     }
+    public function edit($slug){
+
+        
+        return view('adminlayout.products.edit', compact('slug'));
+    }
     
 }

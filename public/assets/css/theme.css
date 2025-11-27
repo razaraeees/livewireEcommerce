@@ -32786,3 +32786,16 @@ ul.single-product-meta li span:first-child {
 [data-bs-theme="dark"] .landing-blog-post-background:hover {
   background-color: var(--bs-section-color-8);
 }
+
+.select2-results__option[data-level="1"] {
+    padding-left: 20px !important;
+}
+
+.select2-results__option[data-level="2"] {
+    padding-left: 35px !important;
+}
+
+.select2-results__option[data-level="3"] {
+    padding-left: 50px !important;
+}
+

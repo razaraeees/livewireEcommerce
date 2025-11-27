@@ -81,59 +81,59 @@ class Products extends Component
         ]);
     }
 
-    // Delete product with all images and variants
-    public function deleteProduct($slug)
-    {
-        $product = Product::where('product_slug', $slug)->firstOrFail();
+    // // Delete product with all images and variants
+    // public function deleteProduct($slug)
+    // {
+    //     $product = Product::where('product_slug', $slug)->firstOrFail();
 
-        // Delete thumbnail image
-        if ($product->thumbnail_image && Storage::disk('public')->exists($product->thumbnail_image)) {
-            Storage::disk('public')->delete($product->thumbnail_image);
-        }
+    //     // Delete thumbnail image
+    //     if ($product->thumbnail_image && Storage::disk('public')->exists($product->thumbnail_image)) {
+    //         Storage::disk('public')->delete($product->thumbnail_image);
+    //     }
 
-        // Delete gallery images
-        if ($product->images) {
-            $images = json_decode($product->images, true);
-            if (is_array($images)) {
-                foreach ($images as $image) {
-                    if (Storage::disk('public')->exists($image)) {
-                        Storage::disk('public')->delete($image);
-                    }
-                }
-            }
-        }
+    //     // Delete gallery images
+    //     if ($product->images) {
+    //         $images = json_decode($product->images, true);
+    //         if (is_array($images)) {
+    //             foreach ($images as $image) {
+    //                 if (Storage::disk('public')->exists($image)) {
+    //                     Storage::disk('public')->delete($image);
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        // Delete variants and their images
-        if ($product->variants) {
-            foreach ($product->variants as $variant) {
-                // Delete variant image
-                if ($variant->image && Storage::disk('public')->exists($variant->image)) {
-                    Storage::disk('public')->delete($variant->image);
-                }
+    //     // Delete variants and their images
+    //     if ($product->variants) {
+    //         foreach ($product->variants as $variant) {
+    //             // Delete variant image
+    //             if ($variant->image && Storage::disk('public')->exists($variant->image)) {
+    //                 Storage::disk('public')->delete($variant->image);
+    //             }
 
-                // Delete variant
-                $variant->delete();
-            }
-        }
+    //             // Delete variant
+    //             $variant->delete();
+    //         }
+    //     }
 
-        // Finally delete the product
-        $product->delete();
+    //     // Finally delete the product
+    //     $product->delete();
 
-        $this->dispatch('alert', [
-            'type' => 'success',
-            'message' => 'Product deleted successfully!',
-        ]);
-    }
+    //     $this->dispatch('alert', [
+    //         'type' => 'success',
+    //         'message' => 'Product deleted successfully!',
+    //     ]);
+    // }
 
     public function delete($id)
     {
         $product = Product::with([
-            'variants.images', // Load variants + their images
+            'productVariants.images', // Load variants + their images
             'images',           // Load product gallery images
         ])->findOrFail($id);
 
         // === Step 1: Delete Product Variant Images (physical + DB) ===
-        foreach ($product->variants as $variant) {
+        foreach ($product->productVariants as $variant) {
             // Delete physical files of variant images
             foreach ($variant->images as $image) {
                 if ($image->image && Storage::disk('public')->exists($image->image)) {
@@ -166,25 +166,26 @@ class Products extends Component
 
     public function render()
     {
-        $products = Product::query()
-            ->when($this->search, function ($query) {
-                $query->whereRaw(
-                    'MATCH(product_name, product_code) AGAINST(? IN NATURAL LANGUAGE MODE)',
-                    [$this->search]
-                );
-            })
-            ->when($this->filterStatus !== '', function ($query) {
-                $query->where('status', $this->filterStatus);
-            })
-            ->when($this->filterCategory, function ($query) {
-                $query->where('category_id', $this->filterCategory);
-            })
-            ->when($this->filterBrand, function ($query) {
-                $query->where('brand_id', $this->filterBrand);
-            })
-            ->with(['category', 'brand'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+       $products = Product::query()
+        ->when($this->search, function ($query) {
+            $query->where(function($q) {
+                $q->where('product_name', 'like', '%' . $this->search . '%')
+                ->orWhere('product_code', 'like', '%' . $this->search . '%');
+            });
+        })
+        ->when($this->filterStatus !== '', function ($query) {
+            $query->where('status', $this->filterStatus);
+        })
+        ->when($this->filterCategory, function ($query) {
+            $query->where('category_id', $this->filterCategory);
+        })
+        ->when($this->filterBrand, function ($query) {
+            $query->where('brand_id', $this->filterBrand);
+        })
+        ->with(['category', 'brand'])
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
 
         $categories = Category::where('status', 1)->get();
         $brands = Brand::where('status', 1)->get();

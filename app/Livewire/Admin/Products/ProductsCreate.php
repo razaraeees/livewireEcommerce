@@ -10,7 +10,6 @@ use App\Models\ProductVariant;
 use App\Models\ProductVariantImages;
 use App\Models\ProductVariantValue;
 use App\Models\Variant;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -25,13 +24,11 @@ class ProductsCreate extends Component
     public $product_name;
     public $product_slug;
     public $product_code;
-    // public $product_color;
     public $product_price;
     public $product_discount;
     public $product_weight;
     public $thumbnail_image;
     public $product_images = [];
-    // public $theme;
     public $short_description;
     public $long_description;
     public $stock = 0;
@@ -54,37 +51,32 @@ class ProductsCreate extends Component
     public $availableVariants;
     public $availableAttributes;
     public $productAttributes = [];
-    
- 
+
     public function mount()
     {
         $this->categories = Category::where('status', 1)->get();
         $this->brands = Brand::where('status', 1)->get();
         $this->availableVariants = Variant::where('status', 1)->with('variantValues')->get();
-        
-        // Load attributes with their values (assuming you have Attribute and AttributeValue models)
         $this->availableAttributes = \App\Models\Attribute::where('status', 1)
             ->with('attributeValue')
             ->get();
 
-        // Initialize with one empty variant selection
-        $this->selectedVariants = [''];
+        //  UNIQUE KEY ke saath initialize
+        $this->selectedVariants = [Str::random(8) => ''];
         $this->selectedVariantValues = [];
         $this->generatedCombinations = [];
-        
-        // Initialize with one empty attribute row
         $this->productAttributes = [['attribute_id' => '', 'value_id' => '']];
     }
 
     public function addVariantSelection()
     {
-        $this->selectedVariants[] = '';
+        $this->selectedVariants[Str::random(8)] = '';
     }
 
     public function updatedSelectedVariants($value, $name)
     {
-        if (!empty($value)) {
-            if (!isset($this->selectedVariantValues[$value])) {
+        if (! empty($value)) {
+            if (! isset($this->selectedVariantValues[$value])) {
                 $this->selectedVariantValues[$value] = [];
             }
         }
@@ -92,12 +84,10 @@ class ProductsCreate extends Component
         $this->generateCombinations();
     }
 
-    public function removeVariantSelection($index)
+    public function removeVariantSelection($key)
     {
-        $variantId = $this->selectedVariants[$index] ?? null;
-
-        unset($this->selectedVariants[$index]);
-        $this->selectedVariants = array_values($this->selectedVariants);
+        $variantId = $this->selectedVariants[$key] ?? null;
+        unset($this->selectedVariants[$key]);
 
         if ($variantId && isset($this->selectedVariantValues[$variantId])) {
             unset($this->selectedVariantValues[$variantId]);
@@ -109,12 +99,6 @@ class ProductsCreate extends Component
     // This will auto-trigger when any checkbox is selected/deselected
     public function updatedSelectedVariantValues($value, $key)
     {
-        Log::info('Variant Values Updated:', [
-            'key' => $key,
-            'value' => $value,
-            'all_values' => $this->selectedVariantValues
-        ]);
-        
         // Auto-generate combinations whenever values change
         $this->generateCombinations();
     }
@@ -122,48 +106,39 @@ class ProductsCreate extends Component
     // FIXED: Generate all possible combinations with proper debugging
     public function generateCombinations()
     {
-        Log::info('=== Generate Combinations Started ===');
-        Log::info('Selected Variant Values:', $this->selectedVariantValues);
-
         // Step 1: Clean and validate selections
         $validSelections = [];
-        
+
         foreach ($this->selectedVariantValues as $variantId => $valueIds) {
             // Skip non-numeric or invalid IDs
-            if (!is_numeric($variantId) || $variantId <= 0) {
-                Log::warning("Skipping invalid variant ID: {$variantId}");
+            if (! is_numeric($variantId) || $variantId <= 0) {
                 continue;
             }
 
             // Find the variant
-            $variant = $this->availableVariants->firstWhere('id', (int)$variantId);
-            if (!$variant) {
-                Log::warning("Variant not found: {$variantId}");
+            $variant = $this->availableVariants->firstWhere('id', (int) $variantId);
+            if (! $variant) {
                 continue;
             }
 
             // Clean value IDs
-            if (!is_array($valueIds)) {
+            if (! is_array($valueIds)) {
                 $valueIds = $valueIds ? [$valueIds] : [];
             }
-            
+
             // Filter only valid numeric IDs
             $cleanValueIds = array_filter(
-                array_map('intval', $valueIds), 
-                fn($v) => $v > 0
+                array_map('intval', $valueIds),
+                fn ($v) => $v > 0
             );
 
-            if (!empty($cleanValueIds)) {
-                $validSelections[(int)$variantId] = array_values($cleanValueIds);
-                Log::info("Valid selection for {$variant->name}:", $cleanValueIds);
+            if (! empty($cleanValueIds)) {
+                $validSelections[(int) $variantId] = array_values($cleanValueIds);
             }
         }
 
-        Log::info('Valid Selections:', $validSelections);
-
         // Step 2: Clear if no valid selections
         if (empty($validSelections)) {
-            Log::info('No valid selections, clearing combinations');
             $this->generatedCombinations = [];
             return;
         }
@@ -176,7 +151,6 @@ class ProductsCreate extends Component
 
         // Step 3: Generate Cartesian Product
         $combinations = $this->cartesianProduct($validSelections);
-        Log::info('Generated combinations count:', ['count' => count($combinations)]);
 
         $newCombinations = [];
 
@@ -187,17 +161,15 @@ class ProductsCreate extends Component
 
             // Build label for this combination
             foreach ($combination as $variantId => $valueId) {
-                $variant = $this->availableVariants->firstWhere('id', (int)$variantId);
-                if (!$variant) {
+                $variant = $this->availableVariants->firstWhere('id', (int) $variantId);
+                if (! $variant) {
                     $isValid = false;
-                    Log::error("Variant not found in combo: {$variantId}");
                     break;
                 }
 
-                $value = $variant->variantValues->firstWhere('id', (int)$valueId);
-                if (!$value) {
+                $value = $variant->variantValues->firstWhere('id', (int) $valueId);
+                if (! $value) {
                     $isValid = false;
-                    Log::error("Value not found: variant={$variantId}, value={$valueId}");
                     break;
                 }
 
@@ -205,7 +177,7 @@ class ProductsCreate extends Component
                 $slug[] = Str::slug($value->value);
             }
 
-            if (!$isValid || empty($label)) {
+            if (! $isValid || empty($label)) {
                 continue;
             }
 
@@ -240,7 +212,6 @@ class ProductsCreate extends Component
         }
 
         $this->generatedCombinations = $newCombinations;
-        Log::info('Final combinations count:', ['count' => count($newCombinations)]);
     }
 
     // FIXED: Cartesian product helper
@@ -251,7 +222,7 @@ class ProductsCreate extends Component
         }
 
         $result = [[]];
-        
+
         foreach ($arrays as $variantId => $valueIds) {
             $temp = [];
             foreach ($result as $resultItem) {
@@ -308,16 +279,42 @@ class ProductsCreate extends Component
 
     public function store()
     {
+        // Basic Product Validation
         $this->validate([
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
             'product_name' => 'required|string|max:255',
             'product_slug' => 'required|string|max:255|unique:products,product_slug',
+            'product_code' => 'required|string|max:100|unique:products,product_code',
             'product_price' => 'required|numeric|min:0',
-            'thumbnail_image' => 'nullable|image|max:2048',
-            'product_images.*' => 'nullable|image|max:2048',
+            'product_discount' => 'nullable|numeric|min:0|max:100',
+            'product_weight' => 'nullable|numeric|min:0',
+            'thumbnail_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'product_images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'short_description' => 'nullable|string|max:500',
+            'long_description' => 'nullable|string',
             'stock' => 'nullable|integer|min:0',
+            'stock_status' => 'nullable|in:in_stock,out_of_stock,pre_order',
+            'is_featured' => 'nullable|boolean',
+            'order_by' => 'nullable|integer|min:0',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'status' => 'required|in:0,1',
         ]);
+
+        // Variant Validation (agar variants select kiye hain)
+        if (!empty($this->generatedCombinations)) {
+            $this->validate([
+                'generatedCombinations.*.sku' => 'required|string|max:100',
+                'generatedCombinations.*.price' => 'required|numeric|min:0',
+                'generatedCombinations.*.stock' => 'required|integer|min:0',
+                'generatedCombinations.*.barcode' => 'nullable|string|max:100',
+                'generatedCombinations.*.sale_price' => 'nullable|numeric|min:0',
+                'generatedCombinations.*.weight' => 'nullable|numeric|min:0',
+                'generatedCombinations.*.images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            ]);
+        }
 
         try {
             // Upload thumbnail
@@ -329,24 +326,24 @@ class ProductsCreate extends Component
             // Create product
             $product = Product::create([
                 'category_id' => $this->category_id,
-                'brand_id' => $this->brand_id,
+                'brand_id' => $this->brand_id ?? null,
                 'product_name' => $this->product_name,
                 'product_slug' => $this->product_slug ?: Str::slug($this->product_name),
-                'product_code' => $this->product_code,
-                // 'product_color' => $this->product_color,
+                'product_code' => $this->product_code ?: null,
+                'product_color' => null,
                 'product_price' => $this->product_price,
-                'product_discount' => $this->product_discount,
-                'product_weight' => $this->product_weight,
+                'product_discount' => $this->product_discount ?: null,
+                'product_weight' => $this->product_weight ?: null,
                 'thumbnail_image' => $thumbnailPath,
-                'short_description' => $this->short_description,
-                'long_description' => $this->long_description,
-                'stock' => $this->stock,
-                'stock_status' => $this->stock_status,
-                'is_featured' => $this->is_featured,
-                'order_by' => $this->order_by,
-                'meta_title' => $this->meta_title,
-                'meta_keywords' => $this->meta_keywords,
-                'meta_description' => $this->meta_description,
+                'short_description' => $this->short_description ?: null,
+                'long_description' => $this->long_description ?: null,
+                'stock' => $this->stock ?? 0,
+                'stock_status' => $this->stock_status ?? 'in_stock',
+                'is_featured' => $this->is_featured ? 1 : 0,
+                'order_by' => $this->order_by ?: null,
+                'meta_title' => $this->meta_title ?: null,
+                'meta_keywords' => $this->meta_keywords ?: null,
+                'meta_description' => $this->meta_description ?: null,
                 'status' => $this->status ? 1 : 0,
             ]);
 
@@ -356,16 +353,15 @@ class ProductsCreate extends Component
                     $imagePath = $image->store('products/gallery', 'public');
                     ProductImages::create([
                         'product_id' => $product->id,
-                        'image_path' => $imagePath,
-                        'order_by' => $index,
-                        'status' => 1,
+                        'image' => $imagePath,
+                        'sort_order' => $index,
                     ]);
                 }
             }
 
             // Save Product Attributes (Specifications)
             foreach ($this->productAttributes as $attr) {
-                if (!empty($attr['attribute_id']) && !empty($attr['value_id'])) {
+                if (! empty($attr['attribute_id']) && ! empty($attr['value_id'])) {
                     \App\Models\ProductAttribute::create([
                         'product_id' => $product->id,
                         'attribute_id' => $attr['attribute_id'],
@@ -379,16 +375,13 @@ class ProductsCreate extends Component
                 $productVariant = ProductVariant::create([
                     'product_id' => $product->id,
                     'sku' => $combination['sku'],
-                    'barcode' => $combination['barcode'],
+                    'barcode' => $combination['barcode'] ?: null,
                     'price' => $combination['price'],
-                    'sale_price' => $combination['sale_price'],
-                    'stock' => $combination['stock'],
+                    'sale_price' => $combination['sale_price'] ?: null,
+                    'stock' => $combination['stock'] ?? 0,
                     'variant_slug' => $combination['slug'],
                     'combination_label' => $combination['label'],
-                    'weight' => $combination['weight'],
-                    // 'length' => $combination['length'],
-                    // 'width' => $combination['width'],
-                    // 'height' => $combination['height'],
+                    'weight' => $combination['weight'] ?: null,
                     'status' => $combination['status'] ? 1 : 0,
                 ]);
 
@@ -402,11 +395,10 @@ class ProductsCreate extends Component
                 }
 
                 // Upload variant images
-                if (!empty($combination['images'])) {
+                if (! empty($combination['images'])) {
                     foreach ($combination['images'] as $imgIndex => $image) {
                         $imagePath = $image->store('products/variants', 'public');
                         ProductVariantImages::create([
-                            // 'product_id' => $product->id,
                             'product_variant_id' => $productVariant->id,
                             'image' => $imagePath,
                             'sort_order' => $imgIndex,
@@ -416,6 +408,7 @@ class ProductsCreate extends Component
             }
 
             $this->dispatch('show-toast', type: 'success', message: 'Product Created Successfully!');
+
             return redirect()->route('admin.product');
 
         } catch (\Exception $e) {
@@ -437,12 +430,10 @@ class ProductsCreate extends Component
                 'product_name' => $this->product_name ?: 'Draft Product',
                 'product_slug' => $this->product_slug ?: Str::slug('draft-'.time()),
                 'product_code' => $this->product_code,
-                // 'product_color' => $this->product_color,
                 'product_price' => $this->product_price ?: 0,
                 'product_discount' => $this->product_discount,
                 'product_weight' => $this->product_weight,
                 'thumbnail_image' => $thumbnailPath,
-                // 'theme' => $this->theme,
                 'short_description' => $this->short_description,
                 'long_description' => $this->long_description,
                 'stock' => $this->stock,

@@ -83,7 +83,40 @@
                                             </div>
                                         </div>
 
-                                        @livewire('admin.categories.categories-tree-drop')
+                                        <div class="col-lg-6">
+                                            <div class="mb-8">
+                                                <label class="mb-4 fs-13px ls-1 fw-bold text-uppercase">
+                                                    Category <span class="text-danger">*</span>
+                                                </label>
+
+                                                <select wire:model="category_id" class="form-control" required>
+                                                    <option value="">Select Category</option>
+
+                                                    @php
+                                                        function renderCategory($category, $prefix = '') {
+                                                            echo '<option value="'.$category->id.'">'.$prefix.$category->category_name.'</option>';
+
+                                                            if (!empty($category->children)) {
+                                                                foreach ($category->children as $child) {
+                                                                    renderCategory($child, $prefix.'— ');
+                                                                }
+                                                            }
+                                                        }
+
+                                                        foreach ($this->categoryTree as $cat) {
+                                                            renderCategory($cat);
+                                                        }
+                                                    @endphp
+                                                </select>
+
+                                                @error('category_id')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+
+
 
                                         <!-- Brand -->
                                         <div class="col-lg-6">
@@ -160,10 +193,14 @@
                                         <div class="col-lg-6">
                                             <div class="mb-8">
                                                 <label class="mb-4 fs-13px ls-1 fw-bold text-uppercase">
-                                                    Stock Quantity
+                                                    Stock Quantity <span class="text-danger">*</span>
                                                 </label>
                                                 <input type="number" wire:model="stock" class="form-control"
                                                     placeholder="0" min="0">
+                                                @error('stock')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+
                                             </div>
                                         </div>
 

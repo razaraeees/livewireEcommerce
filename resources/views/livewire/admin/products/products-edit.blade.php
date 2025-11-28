@@ -88,11 +88,21 @@
                                                 </label>
                                                 <select wire:model="category_id" class="form-control" required>
                                                     <option value="">Select Category</option>
-                                                    @foreach ($categories as $category)
-                                                        <option value="{{ $category->id }}">
-                                                            {{ $category->category_name }}</option>
-                                                    @endforeach
+                                                    @php
+                                                        function renderCategory($category, $prefix = '') {
+                                                            echo '<option value="'.$category->id.'">'.$prefix.$category->category_name.'</option>';
+                                                            if (!empty($category->children)) {
+                                                                foreach ($category->children as $child) {
+                                                                    renderCategory($child, $prefix.'— ');
+                                                                }
+                                                            }
+                                                        }
+                                                        foreach ($this->categoryTree as $cat) {
+                                                            renderCategory($cat);
+                                                        }
+                                                    @endphp
                                                 </select>
+
                                                 @error('category_id')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror

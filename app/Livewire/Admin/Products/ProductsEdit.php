@@ -492,7 +492,7 @@ class ProductsEdit extends Component
             'product_images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'short_description' => 'nullable|string|max:500',
             'long_description' => 'nullable|string',
-            'stock' => 'nullable|integer|min:0',
+            'stock' => 'required|integer|min:0',
             'stock_status' => 'nullable|in:in_stock,out_of_stock,pre_order',
             'is_featured' => 'nullable|boolean',
             'order_by' => 'nullable|integer|min:0',
@@ -600,6 +600,30 @@ class ProductsEdit extends Component
 
             $this->dispatch('show-toast', type: 'error', message: 'Error: '.$e->getMessage());
         }
+    }
+
+    public function getCategoryTreeProperty()
+    {
+        $categories = Category::all();
+
+        return $this->buildTree($categories);
+    }
+
+    private function buildTree($categories, $parentId = null)
+    {
+        $branch = [];
+
+        foreach ($categories as $category) {
+            if ($category->parent_id == $parentId) {
+
+                $children = $this->buildTree($categories, $category->id);
+                $category->children = $children;
+
+                $branch[] = $category;
+            }
+        }
+
+        return $branch;
     }
 
     private function updateVariants()

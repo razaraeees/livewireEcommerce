@@ -105,14 +105,8 @@
             });
         });
     </script>
-    <script>
-        $(document).ready(function() {
-            $('#category').select2({
-                placeholder: "Select Category",
-                allowClear: true
-            });
-        });
-    </script>
+    
+   
 
     @stack('scripts')
 

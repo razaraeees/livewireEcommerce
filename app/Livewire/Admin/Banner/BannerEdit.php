@@ -185,78 +185,62 @@ class BannerEdit extends Component
 
     public function update()
     {
-        Log::info('=== Banner Update Started ===', [
-            'banner_id' => $this->banner_id,
-            'title' => $this->title,
-            'type' => $this->type
-        ]);
-
         // Validate form
         try {
             $this->validate();
-            Log::info('Validation passed');
+            
         } catch (\Exception $e) {
-            Log::error('Validation failed', [
-                'error' => $e->getMessage(),
-                'errors' => $this->getErrorBag()->toArray()
-            ]);
+            
             throw $e;
         }
 
         try {
-            Log::info('Starting file handling...');
+
 
             // Handle Desktop Image
             if ($this->image) {
-                Log::info('Processing new desktop image');
+                
                 // Delete old image if exists
                 if ($this->old_image && Storage::disk('public')->exists($this->old_image)) {
                     Storage::disk('public')->delete($this->old_image);
-                    Log::info('Old desktop image deleted', ['path' => $this->old_image]);
+                   
                 }
                 $imagePath = $this->image->store('banners', 'public');
-                Log::info('New desktop image stored', ['path' => $imagePath]);
+                
             } else {
                 $imagePath = $this->old_image;
-                Log::info('Keeping old desktop image', ['path' => $imagePath]);
+                
             }
 
             // Handle Mobile Image
             if ($this->mobile_image) {
-                Log::info('Processing new mobile image');
+               
                 // Delete old mobile image if exists
                 if ($this->old_mobile_image && Storage::disk('public')->exists($this->old_mobile_image)) {
                     Storage::disk('public')->delete($this->old_mobile_image);
-                    Log::info('Old mobile image deleted', ['path' => $this->old_mobile_image]);
+                   
                 }
                 $mobilePath = $this->mobile_image->store('banners', 'public');
-                Log::info('New mobile image stored', ['path' => $mobilePath]);
+                
             } else {
                 $mobilePath = $this->old_mobile_image;
-                Log::info('Keeping old mobile image', ['path' => $mobilePath]);
+                
             }
 
             // Handle Video
             if ($this->banner_video) {
-                Log::info('Processing new video');
+               
                 // Delete old video if exists
                 if ($this->old_banner_video && Storage::disk('public')->exists($this->old_banner_video)) {
                     Storage::disk('public')->delete($this->old_banner_video);
-                    Log::info('Old video deleted', ['path' => $this->old_banner_video]);
+                   
                 }
                 $videoPath = $this->banner_video->store('banners/videos', 'public');
-                Log::info('New video stored', ['path' => $videoPath]);
+                
             } else {
                 $videoPath = $this->old_banner_video;
-                Log::info('Keeping old video', ['path' => $videoPath]);
             }
 
-            Log::info('Preparing database update...', [
-                'banner_id' => $this->banner_id,
-                'image_path' => $imagePath,
-                'mobile_path' => $mobilePath,
-                'video_path' => $videoPath
-            ]);
 
             // Update Banner in database
             $updated = Banner::where('id', $this->banner_id)->update([
@@ -273,31 +257,17 @@ class BannerEdit extends Component
                 'banner_video' => $videoPath,
             ]);
 
-            Log::info('Database update completed', [
-                'rows_affected' => $updated,
-                'banner_id' => $this->banner_id
-            ]);
-
             // Show success message
             // session()->flash('success', 'Banner Updated Successfully!');
             $this->dispatch('show-toast', type: 'success', message: 'Banner Updated Successfully!');
 
-            Log::info('=== Banner Update Successful ===');
 
             // Redirect to banner list
             return redirect()->route('admin.banner');
 
         } catch (\Exception $e) {
-            Log::error('=== Banner Update Failed ===', [
-                'banner_id' => $this->banner_id,
-                'error_message' => $e->getMessage(),
-                'error_file' => $e->getFile(),
-                'error_line' => $e->getLine(),
-                'stack_trace' => $e->getTraceAsString()
-            ]);
-
-            // Show error message
-            session()->flash('error', 'Error updating banner: ' . $e->getMessage());
+           
+            
             $this->dispatch('show-toast', type: 'error', message: 'Error updating banner: ' . $e->getMessage());
             
             // Don't redirect on error, stay on page

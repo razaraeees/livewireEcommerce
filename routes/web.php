@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VariantController;
@@ -63,6 +64,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/product/create', 'create')->name('product.create');
         Route::get('/product/edit/{slug}', 'edit')->name('product.edit');
     });
+
+    Route::controller(CouponController::class)->group(function(){
+        Route::get('/coupon', 'index')->name('coupon');
+        Route::get('/coupon/create', 'create')->name('coupon.create');
+        Route::get('/coupon/edit/{slug}', 'edit')->name('coupon.edit');
+    });
+    
     
    
 });

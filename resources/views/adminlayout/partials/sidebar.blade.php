@@ -159,9 +159,9 @@
                             class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
                             data-bs-toggle="collapse" aria-expanded="false" title="Order">
                             <span class="sidebar-item-icon d-inline-block w-40px text-muted">
-                                <i class="fas fa-shopping-cart"></i>
+                                <i class="fa-solid fa-bullhorn"></i>
                             </span>
-                            <span class="sidebar-item-text fs-14px fw-semibold">Order</span>
+                            <span class="sidebar-item-text fs-14px fw-semibold">Marketing</span>
                             <span class="position-absolute top-50 end-5 translate-middle-y"><i
                                     class="far fa-angle-down"></i></span>
                         </a>
@@ -169,15 +169,7 @@
                             <ul class="sub-menu list-unstyled">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="order-list.html" title="Order List 1">Order List 1</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="order-list-2.html" title="Order List 2">Order List 2</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="order-detail.html" title="Order detail">Order detail</a>
+                                        href="{{ route('admin.coupon') }}" title="Order List 1">Coupans & Discount</a>
                                 </li>
                             </ul>
                         </div>

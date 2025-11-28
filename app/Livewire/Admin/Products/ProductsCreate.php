@@ -20,36 +20,61 @@ class ProductsCreate extends Component
 
     // Product fields
     public $category_id;
+
     public $brand_id;
+
     public $product_name;
+
     public $product_slug;
+
     public $product_code;
+
     public $product_price;
+
     public $product_discount;
+
     public $product_weight;
+
     public $thumbnail_image;
+
     public $product_images = [];
+
     public $short_description;
+
     public $long_description;
+
     public $stock = 0;
+
     public $stock_status = 'in_stock';
+
     public $is_featured = false;
+
     public $order_by = 0;
+
     public $meta_title;
+
     public $meta_keywords;
+
     public $meta_description;
+
     public $status = true;
 
     // Variant Selection System
     public $selectedVariants = [];
+
     public $selectedVariantValues = [];
+
     public $generatedCombinations = [];
 
     // Data for dropdowns
     public $categories = [];
+
     public $brands = [];
+
     public $availableVariants;
+
     public $availableAttributes;
+
     public $productAttributes = [];
 
     public function mount()
@@ -140,12 +165,14 @@ class ProductsCreate extends Component
         // Step 2: Clear if no valid selections
         if (empty($validSelections)) {
             $this->generatedCombinations = [];
+
             return;
         }
 
         // Need at least 1 variant with values to generate
         if (count($validSelections) < 1) {
             $this->generatedCombinations = [];
+
             return;
         }
 
@@ -281,39 +308,46 @@ class ProductsCreate extends Component
     {
         // Basic Product Validation
         $this->validate([
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'nullable|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
-            'product_name' => 'required|string|max:255',
-            'product_slug' => 'required|string|max:255|unique:products,product_slug',
-            'product_code' => 'required|string|max:100|unique:products,product_code',
-            'product_price' => 'required|numeric|min:0',
-            'product_discount' => 'nullable|numeric|min:0|max:100',
-            'product_weight' => 'nullable|numeric|min:0',
+            'product_name' => 'required|max:255',
+            'product_slug' => 'required|max:255|unique:products,product_slug',
+            'product_code' => 'required|max:100|unique:products,product_code',
+            'product_price' => 'required|min:0',
+            'product_discount' => 'nullable|min:0|max:100',
+            'product_weight' => 'nullable|min:0',
+
             'thumbnail_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'product_images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'short_description' => 'nullable|string|max:500',
-            'long_description' => 'nullable|string',
-            'stock' => 'nullable|integer|min:0',
+
+            'short_description' => 'nullable|max:500',
+            'long_description' => 'nullable',
+
+            'stock' => 'required|min:0',
             'stock_status' => 'nullable|in:in_stock,out_of_stock,pre_order',
-            'is_featured' => 'nullable|boolean',
-            'order_by' => 'nullable|integer|min:0',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_keywords' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500',
+            'is_featured' => 'nullable',
+            'order_by' => 'nullable|min:0',
+
+            'meta_title' => 'nullable|max:255',
+            'meta_keywords' => 'nullable|max:255',
+            'meta_description' => 'nullable|max:500',
+
             'status' => 'required|in:0,1',
         ]);
 
         // Variant Validation (agar variants select kiye hain)
-        if (!empty($this->generatedCombinations)) {
+        if (! empty($this->generatedCombinations)) {
             $this->validate([
-                'generatedCombinations.*.sku' => 'required|string|max:100',
-                'generatedCombinations.*.price' => 'required|numeric|min:0',
-                'generatedCombinations.*.stock' => 'required|integer|min:0',
-                'generatedCombinations.*.barcode' => 'nullable|string|max:100',
-                'generatedCombinations.*.sale_price' => 'nullable|numeric|min:0',
-                'generatedCombinations.*.weight' => 'nullable|numeric|min:0',
+                'generatedCombinations.*.sku' => 'required|max:100',
+                'generatedCombinations.*.price' => 'required|min:0',
+                'generatedCombinations.*.stock' => 'required|min:0',
+                'generatedCombinations.*.barcode' => 'nullable|max:100',
+                'generatedCombinations.*.sale_price' => 'nullable|min:0',
+                'generatedCombinations.*.weight' => 'nullable|min:0',
+
                 'generatedCombinations.*.images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
+
         }
 
         try {
@@ -413,7 +447,32 @@ class ProductsCreate extends Component
 
         } catch (\Exception $e) {
             $this->dispatch('show-toast', type: 'error', message: 'Error: '.$e->getMessage());
+
         }
+    }
+
+    public function getCategoryTreeProperty()
+    {
+        $categories = Category::all();
+
+        return $this->buildTree($categories);
+    }
+
+    private function buildTree($categories, $parentId = null)
+    {
+        $branch = [];
+
+        foreach ($categories as $category) {
+            if ($category->parent_id == $parentId) {
+
+                $children = $this->buildTree($categories, $category->id);
+                $category->children = $children;
+
+                $branch[] = $category;
+            }
+        }
+
+        return $branch;
     }
 
     public function saveDraft()
@@ -450,6 +509,7 @@ class ProductsCreate extends Component
 
         } catch (\Exception $e) {
             $this->dispatch('show-toast', type: 'error', message: 'Error: '.$e->getMessage());
+
         }
     }
 

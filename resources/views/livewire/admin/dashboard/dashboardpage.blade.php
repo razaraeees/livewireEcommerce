@@ -22,41 +22,41 @@
 
         </div>
     </div>
-    <div class="row">
-        <livewire:admin.dashboard.stats-card
-            title="Revenue"
-            value="13,456.5"
-            subtitle="Shipping fees are not included."
-            icon='<i class="fas fa-dollar-sign"></i>'
-            textColor="text-green"
-            bgColor="bg-green-light"
-        />
-        <livewire:admin.dashboard.stats-card
-            title="Orders"
-            value="53.668"
-            subtitle="Excluding orders in transit."
-            icon='<i class="fas fa-truck"></i>'
-            textColor="text-success"
-            bgColor="bg-success-light"
-        />
-        <livewire:admin.dashboard.stats-card
-            title="Products"
-            value="9.856"
-            subtitle="In 19 Categories."
-            icon='<i class="fas fa-qrcode"></i>'
-            textColor="text-warning"
-            bgColor="bg-warning-light"
-        />
-        <livewire:admin.dashboard.stats-card
-            title="Monthly Earning"
-            value="6,982"
-            subtitle="Based in your local time."
-            icon='<i class="fas fa-shopping-bag"></i>'
-            textColor="text-info"
-            bgColor="bg-info-light"
-        />
-        
-    </div>
+        <div class="row">
+            <livewire:admin.dashboard.stats-card
+                title="Revenue"
+                value="13,456.5"
+                subtitle="Shipping fees are not included."
+                icon='<i class="fas fa-dollar-sign"></i>'
+                textColor="text-green"
+                bgColor="bg-green-light"
+            />
+            <livewire:admin.dashboard.stats-card
+                title="Orders"
+                value="53.668"
+                subtitle="Excluding orders in transit."
+                icon='<i class="fas fa-truck"></i>'
+                textColor="text-success"
+                bgColor="bg-success-light"
+            />
+            <livewire:admin.dashboard.stats-card
+                title="Products"
+                value="9.856"
+                subtitle="In 19 Categories."
+                icon='<i class="fas fa-qrcode"></i>'
+                textColor="text-warning"
+                bgColor="bg-warning-light"
+            />
+            <livewire:admin.dashboard.stats-card
+                title="Monthly Earning"
+                value="6,982"
+                subtitle="Based in your local time."
+                icon='<i class="fas fa-shopping-bag"></i>'
+                textColor="text-info"
+                bgColor="bg-info-light"
+            />
+            
+        </div>
     <div class="row">
         <div class="col-xl-8">
             <div class="card rounded-4 p-7 mb-7">

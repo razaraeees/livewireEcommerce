@@ -43,7 +43,6 @@ class Brands extends Component
         }
 
         $brands = $brands->orderBy('id', 'desc')->paginate(10);
-
         return view('livewire.admin.brand.brands', [
             'brands' => $brands
         ]);

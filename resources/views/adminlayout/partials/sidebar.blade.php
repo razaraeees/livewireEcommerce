@@ -183,7 +183,7 @@
                             <span class="sidebar-item-icon d-inline-block w-40px text-muted">
                                 <i class="fas fa-users"></i>
                             </span>
-                            <span class="sidebar-item-text fs-14px fw-semibold">Sellers</span>
+                            <span class="sidebar-item-text fs-14px fw-semibold">Users</span>
                             <span class="position-absolute top-50 end-5 translate-middle-y"><i
                                     class="far fa-angle-down"></i></span>
                         </a>
@@ -191,16 +191,15 @@
                             <ul class="sub-menu list-unstyled">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="sellers-cards.html" title="Sellers Cards">Sellers Cards</a>
+                                        href="{{ route('admin.user') }}" title="Sellers Cards">Customer List</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="sellers-list.html" title="Sellers List">Sellers List</a>
+                                        href="{{ route('admin.user.subscriber') }}" title="Sellers List">Newsletter Subscribers</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="sellers-profile.html" title="Sellers Profile">Sellers
-                                        Profile</a>
+                                        href="{{ route('admin.inquiries') }}" title="Sellers List">Inquiries</a>
                                 </li>
                             </ul>
                         </div>
@@ -212,9 +211,9 @@
                             class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
                             data-bs-toggle="collapse" aria-expanded="false" title="Add Product">
                             <span class="sidebar-item-icon d-inline-block w-40px text-muted">
-                                <i class="fas fa-plus-square"></i>
+                                <i class="fas fa-star"></i>
                             </span>
-                            <span class="sidebar-item-text fs-14px fw-semibold">Add Product</span>
+                            <span class="sidebar-item-text fs-14px fw-semibold">Product Review</span>
                             <span class="position-absolute top-50 end-5 translate-middle-y"><i
                                     class="far fa-angle-down"></i></span>
                         </a>
@@ -222,19 +221,7 @@
                             <ul class="sub-menu list-unstyled">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="add-product-1.html" title="Add Product 1">Add Product 1</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="add-product-2.html" title="Add Product 2">Add Product 2</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="add-product-3.html" title="Add Product 3">Add Product 3</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="add-product-4.html" title="Add Product 4">Add Product 4</a>
+                                        href="{{ route('admin.rating') }}" title="Add Product 1">Reviews</a>
                                 </li>
                             </ul>
                         </div>

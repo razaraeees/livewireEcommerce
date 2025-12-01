@@ -6,7 +6,10 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\InquireController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\RatingController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Livewire\Admin\Banner\BannerCreate;
 use App\Livewire\Admin\Banner\Bannerpage;
@@ -70,7 +73,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/coupon/create', 'create')->name('coupon.create');
         Route::get('/coupon/edit/{slug}', 'edit')->name('coupon.edit');
     });
-    
+    Route::controller(UserController::class)->group(function(){
+        Route::get('/user', 'index')->name('user');
+        Route::get('/newsletter-subscriber', 'subIndex')->name('user.subscriber');
+        Route::get('/inquiries', 'inquiriesIndex')->name('inquiries');
+    });
+    Route::controller(RatingController::class)->group(function(){
+        Route::get('/ratings', 'index')->name('rating');
+    });
+
     
    
 });

@@ -1,0 +1,104 @@
+/* Status Toggle */
+/* .status-toggle {
+    width: 100px;
+    height: 80px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+} */
+
+.status-toggle:checked {
+    background-color: #4e7661 !important;
+    border-color: #4e7661 !important;
+}
+
+.status-toggle:not(:checked) {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.modal-header.bg-gradient-dark {
+    background: #4e7661;
+}
+
+.avatar-lg {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.icon-badge {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.bg-light-subtle {
+    background-color: #f8f9fa !important;
+}
+
+.bg-primary-subtle {
+    background-color: #e0f2f7 !important;
+}
+
+.bg-success-subtle {
+    background-color: #e6faed !important;
+}
+
+.bg-info-subtle {
+    background-color: #e0f7fa !important;
+}
+
+.bg-warning-subtle {
+    background-color: #fff3cd !important;
+}
+
+.bg-danger-subtle {
+    background-color: #fce8e6 !important;
+}
+
+.text-dark-emphasis {
+    color: #343a40 !important;
+}
+
+.fw-medium {
+    font-weight: 500 !important;
+}
+
+.bg-warning-dark {
+    /* Your chosen brown/gold color for the banner */
+    background-color: #A9874D !important;
+}
+
+.profile-image-container {
+    /* To make the image overlap the banner and the white area */
+    position: relative;
+    z-index: 10;
+}
+
+.fs-7 {
+    font-size: 0.9rem !important;
+}
+
+.text-success {
+    color: #4e7661 !important;
+}
+
+.bg-success-subtle {
+    background-color: #e6faed !important;
+}
+.letter-spacing-1 {
+    letter-spacing: 0.5px;
+}
+
+.fs-12px {
+    font-size: 12px;
+}
+
+.modal-dialog-scrollable .modal-body {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}

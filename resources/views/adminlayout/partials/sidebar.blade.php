@@ -94,7 +94,8 @@
                     </div>
                 </form>
                 <ul class="list-group list-group-flush list-group-no-border w-100 p-6">
-                    <li class="list-group-item px-0 py-0 sidebar-item mb-3 border-0 {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <li
+                        class="list-group-item px-0 py-0 sidebar-item mb-3 border-0 {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}"
                             class="text-heading text-decoration-none lh-1 sidebar-link py-5 px-6 d-flex align-items-center"
                             title="Dashboard">
@@ -104,7 +105,8 @@
                             <span class="sidebar-item-text fs-14px fw-semibold">Dashboard</span>
                         </a>
                     </li>
-                    <li class="list-group-item px-0 py-0 sidebar-item mb-3 border-0 {{ request()->routeIs('admin.banner') ? 'active' : '' }}">
+                    <li
+                        class="list-group-item px-0 py-0 sidebar-item mb-3 border-0 {{ request()->routeIs('admin.banner') ? 'active' : '' }}">
                         <a href="{{ route('admin.banner') }}"
                             class="text-heading text-decoration-none lh-1 sidebar-link py-5 px-6 d-flex align-items-center"
                             title="Banner">
@@ -118,7 +120,9 @@
                     <li class="list-group-item px-0 py-0 sidebar-item mb-3 has-children border-0">
                         <a href="#product"
                             class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
-                            data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('admin.brand*', 'admin.categories*') ? 'true' : 'false' }}" title="Products">
+                            data-bs-toggle="collapse"
+                            aria-expanded="{{ request()->routeIs('admin.brand*', 'admin.categories*') ? 'true' : 'false' }}"
+                            title="Products">
                             <span class="sidebar-item-icon d-inline-block w-40px text-muted">
                                 <i class="fas fa-shopping-bag"></i>
                             </span>
@@ -126,7 +130,8 @@
                             <span class="position-absolute top-50 end-5 translate-middle-y"><i
                                     class="far fa-angle-down"></i></span>
                         </a>
-                        <div class="collapse menu-collapse {{ request()->routeIs('admin.brand*', 'admin.categories') ? 'show' : '' }}" id="product">
+                        <div class="collapse menu-collapse {{ request()->routeIs('admin.brand*', 'admin.categories') ? 'show' : '' }}"
+                            id="product">
                             <ul class="sub-menu list-unstyled">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
@@ -139,7 +144,7 @@
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold {{ request()->routeIs('admin.brand*') ? 'active' : '' }}"
                                         href="{{ route('admin.brand') }}" title="Product Grid 2">Brands
-                                        </a>
+                                    </a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
@@ -155,9 +160,9 @@
 
 
                     <li class="list-group-item px-0 py-0 sidebar-item mb-3 has-children border-0">
-                        <a href="#order"
+                        <a href="#marketing"
                             class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
-                            data-bs-toggle="collapse" aria-expanded="false" title="Order">
+                            data-bs-toggle="collapse" aria-expanded="false" title="marketing">
                             <span class="sidebar-item-icon d-inline-block w-40px text-muted">
                                 <i class="fa-solid fa-bullhorn"></i>
                             </span>
@@ -165,11 +170,12 @@
                             <span class="position-absolute top-50 end-5 translate-middle-y"><i
                                     class="far fa-angle-down"></i></span>
                         </a>
-                        <div class="collapse menu-collapse" id="order">
+                        <div class="collapse menu-collapse" id="marketing">
                             <ul class="sub-menu list-unstyled">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="{{ route('admin.coupon') }}" title="Order List 1">Coupans & Discount</a>
+                                        href="{{ route('admin.coupon') }}" title="Order List 1">Coupans &
+                                        Discount</a>
                                 </li>
                             </ul>
                         </div>
@@ -195,7 +201,8 @@
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="{{ route('admin.user.subscriber') }}" title="Sellers List">Newsletter Subscribers</a>
+                                        href="{{ route('admin.user.subscriber') }}" title="Sellers List">Newsletter
+                                        Subscribers</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
@@ -226,7 +233,25 @@
                             </ul>
                         </div>
                     </li>
-
+                    <li class="list-group-item px-0 py-0 sidebar-item mb-3 has-children border-0">
+                        <a href="#order"
+                            class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
+                            data-bs-toggle="collapse" aria-expanded="false" title="Order">
+                            <span class="sidebar-item-icon d-inline-block w-40px text-muted">
+                                <i class="fas fa-shopping-cart"></i>
+                            </span>
+                            <span class="sidebar-item-text fs-14px fw-semibold">Order</span>
+                            <span class="position-absolute top-50 end-5 translate-middle-y"><i
+                                    class="far fa-angle-down"></i></span>
+                        </a>
+                        <div class="collapse menu-collapse" id="order">
+                            <ul class="sub-menu list-unstyled">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
+                                        href="{{ route('admin.orders') }}" title="Order List 1">Orders Listing</a>
+                                </li>
+                        </div>
+                    </li>
 
                     <li class="list-group-item px-0 py-0 sidebar-item mb-3 has-children border-0">
                         <a href="#transaction"

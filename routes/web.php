@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InquireController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RatingController;
 use App\Http\Controllers\Admin\UserController;
@@ -81,7 +82,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::controller(RatingController::class)->group(function(){
         Route::get('/ratings', 'index')->name('rating');
     });
-
+    Route::controller(OrderController::class)->group(function(){
+        Route::get('/orders', 'index')->name('orders');
+        Route::get('/orders/{id}', 'indexdetail')->name('orders.detail');
+    });
     
    
 });

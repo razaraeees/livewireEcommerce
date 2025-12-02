@@ -9,7 +9,7 @@ use Livewire\WithPagination;
 
 class Categories extends Component
 {
-   use WithPagination;
+    use WithPagination;
 
     public $search = '';
     public $filterStatus = '';
@@ -21,7 +21,7 @@ class Categories extends Component
 
         if ($category) {
             $hasChildren = Category::where('parent_id', $id)->exists();
-            
+
             if ($hasChildren) {
                 $this->dispatch('show-toast', type: 'error', message: 'Cannot delete category with subcategories!');
                 return;
@@ -58,10 +58,10 @@ class Categories extends Component
 
         // Search filter
         if (!empty($this->search)) {
-            $categories->where(function($query) {
+            $categories->where(function ($query) {
                 $query->where('category_name', 'like', "%{$this->search}%")
-                      ->orWhere('url', 'like', "%{$this->search}%")
-                      ->orWhere('description', 'like', "%{$this->search}%");
+                    ->orWhere('url', 'like', "%{$this->search}%")
+                    ->orWhere('description', 'like', "%{$this->search}%");
             });
         }
 

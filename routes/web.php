@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AnnoucementController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BrandController;
@@ -8,8 +9,10 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InquireController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RatingController;
+use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Livewire\Admin\Banner\BannerCreate;
@@ -85,6 +88,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::controller(OrderController::class)->group(function(){
         Route::get('/orders', 'index')->name('orders');
         Route::get('/orders/{id}', 'indexdetail')->name('orders.detail');
+    });
+    Route::controller(AnnoucementController::class)->group(function(){
+        Route::get('/annoucement', 'index')->name('annoucement');
+        Route::get('/annoucement/create', 'create')->name('annoucement.create');
+        Route::get('/annoucement/{id}', 'edit')->name('annoucement.edit');
+    });
+    Route::controller(PageContentController::class)->group(function(){
+        Route::get('/page-content', 'index')->name('page-content');
+        Route::get('/page-content/create', 'create')->name('page-content.create');
+        Route::get('/page-content/{slug}', 'edit')->name('page-content.edit');
+    });
+    Route::controller(SeoController::class)->group(function(){
+        Route::get('/seo', 'index')->name('seo');
+        Route::get('/seo/create', 'create')->name('seo.create');
+        Route::get('/seo/{id}', 'edit')->name('seo.edit');
     });
     
    

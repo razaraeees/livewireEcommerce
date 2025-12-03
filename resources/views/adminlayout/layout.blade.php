@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/plugin/npm/select2@4.0.13/dist/css/select2.min.css') }}" />
     <link rel="stylesheet"
         href="{{ asset('assets/vendors/plugin/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css') }}" />
+    @vite(['resources/js/app.js'])
     @livewireStyles
 
 </head>
@@ -87,7 +88,7 @@
     <script src="{{ asset('assets/vendors/gsap/ScrollTrigger.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/mapbox-gl/mapbox-gl.js') }}"></script>
     <script src="{{ asset('assets/js/dashboard.min.js') }}"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         window.addEventListener('show-toast', event => {
@@ -95,8 +96,6 @@
         });
     </script>
     <script>
-
-
         window.addEventListener('show-toast', event => {
             Swal.fire({
                 toast: true,
@@ -108,8 +107,8 @@
             });
         });
     </script>
-    
-   
+
+
 
     @stack('scripts')
 
@@ -1016,7 +1015,7 @@
         <svg id="moon-stars" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon icon">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
+        </svg>
     </svg>
     <div class="position-fixed z-index-10 bottom-0 end-0 p-10">
         <a href="#"

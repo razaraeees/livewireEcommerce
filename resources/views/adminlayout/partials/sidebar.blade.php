@@ -217,8 +217,8 @@
                         <a href="#add_product"
                             class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
                             data-bs-toggle="collapse" aria-expanded="false" title="Add Product">
-                            <span class="sidebar-item-icon d-inline-block w-40px text-muted">
-                                <i class="fas fa-star"></i>
+                             <span class="sidebar-item-icon w-40px d-inline-block text-muted">
+                                <i class="fas fa-comment-alt"></i>
                             </span>
                             <span class="sidebar-item-text fs-14px fw-semibold">Product Review</span>
                             <span class="position-absolute top-50 end-5 translate-middle-y"><i
@@ -282,58 +282,34 @@
 
 
                     <li class="list-group-item px-0 py-0 sidebar-item mb-3 has-children border-0">
-                        <a href="#account"
+                        <a href="#cms-panel"
                             class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
-                            data-bs-toggle="collapse" aria-expanded="false" title="Account">
+                            data-bs-toggle="collapse" aria-expanded="false" title="cms-panel">
                             <span class="sidebar-item-icon d-inline-block w-40px text-muted">
-                                <i class="fas fa-user"></i>
+                                <i class="fas fa-file-alt"></i>
                             </span>
-                            <span class="sidebar-item-text fs-14px fw-semibold">Account</span>
+                            <span class="sidebar-item-text fs-14px fw-semibold">Cms Pages Info</span>
                             <span class="position-absolute top-50 end-5 translate-middle-y"><i
                                     class="far fa-angle-down"></i></span>
                         </a>
-                        <div class="collapse menu-collapse" id="account">
+                        <div class="collapse menu-collapse" id="cms-panel">
                             <ul class="sub-menu list-unstyled">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="../user-login.html" title="User login">User login</a>
+                                        href="{{ route('admin.annoucement') }}" title="User login">Annoucements</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="../user-registration.html" title="User registration">User
-                                        registration</a>
+                                        href="{{ route('admin.page-content') }}" title="User registration">Pages Content</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
-
-                    <li class="list-group-item px-0 py-0 sidebar-item mb-3 border-0">
-                        <a href="reviews.html"
-                            class="text-heading text-decoration-none lh-1 sidebar-link py-5 px-6 d-flex align-items-center"
-                            title="Reivews">
-                            <span class="sidebar-item-icon w-40px d-inline-block text-muted">
-                                <i class="fas fa-comment-alt"></i>
-                            </span>
-                            <span class="sidebar-item-text fs-14px fw-semibold">Reivews</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item px-0 py-0 sidebar-item mb-3 border-0">
-                        <a href="brands.html"
-                            class="text-heading text-decoration-none lh-1 sidebar-link py-5 px-6 d-flex align-items-center"
-                            title="Brand">
-                            <span class="sidebar-item-icon w-40px d-inline-block text-muted">
-                                <i class="fas fa-certificate"></i>
-                            </span>
-                            <span class="sidebar-item-text fs-14px fw-semibold">Brand</span>
-                        </a>
-                    </li>
-
                     <li class="list-group-item px-0 py-0 sidebar-item mb-3 has-children border-0">
-                        <a href="#setting"
+                        <a href="#seo-setting"
                             class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
-                            data-bs-toggle="collapse" aria-expanded="false" title="Setting">
+                            data-bs-toggle="collapse" aria-expanded="false" title="seo Setting">
                             <span class="sidebar-item-icon d-inline-block w-40px text-muted">
                                 <i class="fas fa-cog"></i>
                             </span>
@@ -341,11 +317,11 @@
                             <span class="position-absolute top-50 end-5 translate-middle-y"><i
                                     class="far fa-angle-down"></i></span>
                         </a>
-                        <div class="collapse menu-collapse" id="setting">
+                        <div class="collapse menu-collapse" id="seo-setting">
                             <ul class="sub-menu list-unstyled">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="profile-settings.html" title="Profile settings">Profile
+                                        href="{{ route('admin.seo') }}" title="Profile settings">Site Seo
                                         settings</a>
                                 </li>
                                 <li class="sidebar-item">

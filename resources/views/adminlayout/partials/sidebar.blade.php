@@ -2,7 +2,6 @@
     <aside class="navbar navbar-expand-xl navbar-light d-block px-0 header-sticky dashboard-nav py-0">
         <div class="sticky-area border-right">
             <div class="d-flex px-6 px-xl-10 w-100 border-bottom py-7 justify-content-between">
-
                 <a href="../index-2.html" class="navbar-brand py-4">
                     <img class="light-mode-img" src="{{ asset('assets/images/others/logo.png') }}" width="179"
                         height="26" alt="Glowing - Bootstrap 5 HTML Templates">
@@ -326,14 +325,22 @@
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="site-settings.html" title="Site settings">Site settings</a>
+                                        href="{{ route('admin.site-setting') }}" title="Site settings">Site settings</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
+                                        href="{{ route('admin.general-setting') }}" title="Site settings">General settings</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
+                                        href="{{ route('admin.shipping-setting') }}" title="Site settings">Shipping settings</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
 
-                    <li class="list-group-item px-0 py-0 sidebar-item mb-3 border-0">
+                    {{-- <li class="list-group-item px-0 py-0 sidebar-item mb-3 border-0">
                         <a href="starter-page.html"
                             class="text-heading text-decoration-none lh-1 sidebar-link py-5 px-6 d-flex align-items-center"
                             title="Starter page">
@@ -342,7 +349,7 @@
                             </span>
                             <span class="sidebar-item-text fs-14px fw-semibold">Starter page</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                 </ul>
             </div>

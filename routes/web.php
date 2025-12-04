@@ -7,12 +7,15 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\GeneralSettingController;
 use App\Http\Controllers\Admin\InquireController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RatingController;
 use App\Http\Controllers\Admin\SeoController;
+use App\Http\Controllers\Admin\ShippingController;
+use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Livewire\Admin\Banner\BannerCreate;
@@ -104,7 +107,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/seo/create', 'create')->name('seo.create');
         Route::get('/seo/{id}', 'edit')->name('seo.edit');
     });
-    
+    Route::controller(SiteSettingController::class)->group(function(){
+        Route::get('/site-setting', 'index')->name('site-setting');
+    });
+    Route::controller(GeneralSettingController::class)->group(function(){
+        Route::get('/general-setting', 'index')->name('general-setting');
+    });
+    Route::controller(ShippingController::class)->group(function(){
+        Route::get('/shipping', 'index')->name('shipping-setting');
+    });
    
 });
 

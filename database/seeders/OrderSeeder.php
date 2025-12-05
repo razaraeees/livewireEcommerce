@@ -25,7 +25,7 @@ class OrderSeeder extends Seeder
 
         $statuses = ['pending', 'processing', 'completed', 'cancelled'];
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 6; $i++) {
             // Randomly select 1 to 5 products for this order
             $orderProducts = $allProducts->random(rand(1, min(5, $allProducts->count())));
 
@@ -81,6 +81,6 @@ class OrderSeeder extends Seeder
             $this->command->info("✅ Order #{$order->order_number} created with status: {$order->status}");
         }
 
-        $this->command->info('🎉 10 Test orders created successfully!');
+        $this->command->info('🎉 6 Test orders created successfully!');
     }
 }

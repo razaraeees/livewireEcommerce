@@ -13,7 +13,7 @@
                 </div>
                 <div class="media-body">
                     <h6 class="mb-4 card-title">{{ $title }}</h6>
-                    <span class="fs-4 d-block font-weight-500 text-primary lh-12">${{ $value }}</span>
+                    <span class="fs-4 d-block font-weight-500 text-primary lh-12">{{ $value }}</span>
                     <span class="fs-14px">{{ $subtitle }}</span>
                 </div>
             </div>

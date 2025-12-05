@@ -19,11 +19,15 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
         ]);
 
-        // User::factory(10)->create();
-
+        // Create test user
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+        ]);
+
+        // Seed orders (requires products to exist)
+        $this->call([
+            OrderSeeder::class,
         ]);
     }
 }

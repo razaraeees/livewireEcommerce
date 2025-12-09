@@ -79,15 +79,6 @@
                                             <option value="cancelled">Cancelled</option>
                                         </select>
                                     </div>
-                                    {{-- <div class="col-lg-3 col-md-6 col-6">
-                                        <select wire:model.live="perPage" class="form-select">
-                                            <option value="20">Show 20</option>
-                                            <option value="30">Show 30</option>
-                                            <option value="40">Show 40</option>
-                                            <option value="50">Show 50</option>
-                                            <option value="100">Show 100</option>
-                                        </select>
-                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -124,6 +115,7 @@
                                         <th class="align-middle" scope="col">Customer Name</th>
                                         <th class="align-middle" scope="col">Total</th>
                                         <th class="align-middle" scope="col">Status</th>
+                                        <th class="align-middle" scope="col">PaymentStatus</th>
                                         <th class="align-middle" scope="col">Date</th>
                                         <th class="align-middle text-center" scope="col">Actions</th>
                                     </tr>
@@ -147,6 +139,20 @@
                                                 <strong>${{ number_format($order->grand_total, 2) }}</strong>
                                                 <br>
                                                 <small class="text-muted">{{ $order->payment_method ?? 'N/A' }}</small>
+                                            </td>
+
+                                            <td>
+                                                @php
+                                                    $paymentStatus = match ($order->paymentstatus) {
+                                                        'paid' => 'alert-secondary',
+                                                        'unpaid' => 'alert-danger',
+                                                        default => 'alert-secondary',
+                                                    };
+                                                @endphp
+                                                <span
+                                                    class="badge rounded-lg rounded-pill alert py-3 px-4 mb-0 {{ $paymentStatus }} border-0 text-capitalize fs-12">
+                                                    {{ ucfirst($order->payment_status) }}
+                                                </span>
                                             </td>
 
                                             <td>

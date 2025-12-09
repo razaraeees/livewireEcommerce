@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\GeneralSetting;
+use App\Models\SiteSetting;
 
 if (!function_exists('formatCurrency')) {
     /**
@@ -67,3 +68,11 @@ if (!function_exists('formatPrice')) {
         return formatCurrency($price);
     }
 }
+if (! function_exists('siteSetting')) {
+
+    function siteSetting()
+    {
+        // 1 row hi hoti hai, is liye first()
+        return SiteSetting::first();
+    }
+}   

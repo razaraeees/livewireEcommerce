@@ -15,22 +15,22 @@ layout('layouts.guest');
 state([
     'name' => '',
     'email' => '',
-    'password' => '',   
-    'password_confirmation' => ''
+    'password' => '',
+    'password_confirmation' => '',
 ]);
 
 rules([
     'name' => ['required', 'string', 'max:255'],
-    'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+    'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
     'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
 ]);
-    
+
 $register = function () {
     $validated = $this->validate();
 
     $validated['password'] = Hash::make($validated['password']);
 
-    event(new Registered($user = User::create($validated)));
+    event(new Registered(($user = User::create($validated))));
 
     Auth::login($user);
 
@@ -48,7 +48,7 @@ $register = function () {
     <!-- Left Side - Register Form -->
     <div class="col-12 col-lg-6 d-flex align-items-center justify-content-center px-4 py-5 bg-white">
         <div class="w-100" style="max-width: 450px;">
-            
+
             <!-- Form Header -->
             <div class="mb-5">
                 <h2 class="display-5 fw-bold mb-3">Create Account</h2>
@@ -62,18 +62,9 @@ $register = function () {
                     <label for="name" class="form-label fw-medium text-dark">
                         Full Name
                     </label>
-                    <input 
-                        wire:model="name" 
-                        id="name" 
-                        type="text" 
-                        name="name" 
-                        required 
-                        autofocus 
-                        autocomplete="name"
-                        class="form-control form-control-lg"
-                        placeholder="Enter your full name"
-                        style="border-radius: 0.5rem;"
-                    />
+                    <input wire:model="name" id="name" type="text" name="name" required autofocus
+                        autocomplete="name" class="form-control form-control-lg" placeholder="Enter your full name"
+                        style="border-radius: 0.5rem;" />
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
 
@@ -82,17 +73,9 @@ $register = function () {
                     <label for="email" class="form-label fw-medium text-dark">
                         Email
                     </label>
-                    <input 
-                        wire:model="email" 
-                        id="email" 
-                        type="email" 
-                        name="email" 
-                        required 
-                        autocomplete="username"
-                        class="form-control form-control-lg"
-                        placeholder="Enter your email"
-                        style="border-radius: 0.5rem;"
-                    />
+                    <input wire:model="email" id="email" type="email" name="email" required
+                        autocomplete="username" class="form-control form-control-lg" placeholder="Enter your email"
+                        style="border-radius: 0.5rem;" />
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
 
@@ -101,17 +84,29 @@ $register = function () {
                     <label for="password" class="form-label fw-medium text-dark">
                         Password
                     </label>
-                    <input 
-                        wire:model="password" 
-                        id="password" 
-                        type="password" 
-                        name="password" 
-                        required 
-                        autocomplete="new-password"
-                        class="form-control form-control-lg"
-                        placeholder="••••••••••"
-                        style="border-radius: 0.5rem;"
-                    />
+                    <div class="position-relative" x-data="{ show: false }">
+                        <input wire:model="password" id="password" :type="show ? 'text' : 'password'" name="password"
+                            required autocomplete="new-password" class="form-control form-control-lg"
+                            placeholder="••••••••••" style="border-radius: 0.5rem; padding-right: 3rem;" />
+                        <button type="button"
+                            class="btn position-absolute top-50 end-0 translate-middle-y text-muted border-0 bg-transparent"
+                            @click="show = !show" style="z-index: 10; padding-right: 1rem;">
+                            <svg x-show="!show" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg x-show="show" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <path
+                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                </path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
 
@@ -120,33 +115,44 @@ $register = function () {
                     <label for="password_confirmation" class="form-label fw-medium text-dark">
                         Confirm Password
                     </label>
-                    <input 
-                        wire:model="password_confirmation" 
-                        id="password_confirmation" 
-                        type="password" 
-                        name="password_confirmation" 
-                        required 
-                        autocomplete="new-password"
-                        class="form-control form-control-lg"
-                        placeholder="••••••••••"
-                        style="border-radius: 0.5rem;"
-                    />
+                    <div class="position-relative" x-data="{ show: false }">
+                        <input wire:model="password_confirmation" id="password_confirmation"
+                            :type="show ? 'text' : 'password'" name="password_confirmation" required
+                            autocomplete="new-password" class="form-control form-control-lg" placeholder="••••••••••"
+                            style="border-radius: 0.5rem; padding-right: 3rem;" />
+                        <button type="button"
+                            class="btn position-absolute top-50 end-0 translate-middle-y text-muted border-0 bg-transparent"
+                            @click="show = !show" style="z-index: 10; padding-right: 1rem;">
+                            <svg x-show="!show" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg x-show="show" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <path
+                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                </path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                 </div>
 
                 <!-- Submit Button -->
-                <button 
-                    type="submit" 
-                    class="btn btn-dark btn-lg w-100 fw-medium mb-3"
-                    style="border-radius: 0.5rem; padding: 0.875rem;"
-                >
+                <button type="submit" class="btn btn-dark btn-lg w-100 fw-medium mb-3"
+                    style="border-radius: 0.5rem; padding: 0.875rem;">
                     Create Account
                 </button>
 
                 <!-- Login Link -->
                 <div class="text-center">
                     <span class="text-muted">Already have an account?</span>
-                    <a href="{{ route('login') }}" wire:navigate class="text-decoration-none text-dark fw-medium ms-1">
+                    <a href="{{ route('login') }}" wire:navigate
+                        class="text-decoration-none text-dark fw-medium ms-1">
                         Sign In
                     </a>
                 </div>
@@ -160,14 +166,16 @@ $register = function () {
     </div>
 
     <!-- Right Side - Geometric Design -->
-    <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #000000 100%);">
-        
+    <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center position-relative overflow-hidden"
+        style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #000000 100%);">
+
         <!-- Geometric Pattern Background -->
         <div class="position-absolute w-100 h-100" style="opacity: 0.2;">
             <svg class="w-100 h-100" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <pattern id="geometric" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-                        <path d="M 50,0 L 100,50 L 50,100 L 0,50 Z" fill="none" stroke="white" stroke-width="0.5"/>
+                        <path d="M 50,0 L 100,50 L 50,100 L 0,50 Z" fill="none" stroke="white"
+                            stroke-width="0.5" />
                     </pattern>
                 </defs>
                 <rect width="100%" height="100%" fill="url(#geometric)" />
@@ -176,25 +184,37 @@ $register = function () {
 
         <!-- Animated Concentric Circles -->
         <div class="position-relative">
-            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 400px; height: 400px;">
+            <div class="position-relative d-flex align-items-center justify-content-center"
+                style="width: 400px; height: 400px;">
                 <!-- Circles -->
-                <div class="position-absolute rounded-circle border border-white" style="inset: 0; opacity: 0.1;"></div>
-                <div class="position-absolute rounded-circle border border-white" style="inset: 20px; opacity: 0.1;"></div>
-                <div class="position-absolute rounded-circle border border-white" style="inset: 40px; opacity: 0.1;"></div>
-                <div class="position-absolute rounded-circle border border-white" style="inset: 60px; opacity: 0.1;"></div>
-                <div class="position-absolute rounded-circle border border-white" style="inset: 80px; opacity: 0.1;"></div>
-                <div class="position-absolute rounded-circle border border-white" style="inset: 100px; opacity: 0.1;"></div>
-                <div class="position-absolute rounded-circle border border-white" style="inset: 120px; opacity: 0.1;"></div>
-                <div class="position-absolute rounded-circle border border-white" style="inset: 140px; opacity: 0.1;"></div>
-                <div class="position-absolute rounded-circle border border-white" style="inset: 160px; opacity: 0.1;"></div>
-                <div class="position-absolute rounded-circle border border-white" style="inset: 180px; opacity: 0.1;"></div>
-                
+                <div class="position-absolute rounded-circle border border-white" style="inset: 0; opacity: 0.1;">
+                </div>
+                <div class="position-absolute rounded-circle border border-white" style="inset: 20px; opacity: 0.1;">
+                </div>
+                <div class="position-absolute rounded-circle border border-white" style="inset: 40px; opacity: 0.1;">
+                </div>
+                <div class="position-absolute rounded-circle border border-white" style="inset: 60px; opacity: 0.1;">
+                </div>
+                <div class="position-absolute rounded-circle border border-white" style="inset: 80px; opacity: 0.1;">
+                </div>
+                <div class="position-absolute rounded-circle border border-white" style="inset: 100px; opacity: 0.1;">
+                </div>
+                <div class="position-absolute rounded-circle border border-white" style="inset: 120px; opacity: 0.1;">
+                </div>
+                <div class="position-absolute rounded-circle border border-white" style="inset: 140px; opacity: 0.1;">
+                </div>
+                <div class="position-absolute rounded-circle border border-white" style="inset: 160px; opacity: 0.1;">
+                </div>
+                <div class="position-absolute rounded-circle border border-white" style="inset: 180px; opacity: 0.1;">
+                </div>
+
                 <!-- Center Logo -->
-                <div class="position-relative d-flex align-items-center justify-content-center shadow-lg" 
-                     style="width: 100px; height: 100px; background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%); border-radius: 1rem; transform: rotate(45deg); z-index: 10;">
+                <div class="position-relative d-flex align-items-center justify-content-center shadow-lg"
+                    style="width: 100px; height: 100px; background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%); border-radius: 1rem; transform: rotate(45deg); z-index: 10;">
                     <div style="transform: rotate(-45deg);">
                         <svg width="56" height="56" fill="white" viewBox="0 0 24 24">
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                         </svg>
                     </div>
                 </div>
@@ -204,17 +224,20 @@ $register = function () {
         <!-- Bottom Text -->
         <div class="position-absolute text-center px-5" style="bottom: 5rem; left: 0; right: 0;">
             <h2 class="display-4 fw-bold text-white mb-3">
-                Join Us Today<br/>
-                <span class="d-inline-block" style="background: linear-gradient(90deg, #22d3ee 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                Join Us Today<br />
+                <span class="d-inline-block"
+                    style="background: linear-gradient(90deg, #22d3ee 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
                     Start Your Journey
                 </span>
             </h2>
         </div>
 
         <!-- Decorative Corner Elements -->
-        <div class="position-absolute rounded-circle" 
-             style="top: 0; right: 0; width: 256px; height: 256px; background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, transparent 100%); border-radius: 0 0 0 100%;"></div>
-        <div class="position-absolute rounded-circle" 
-             style="bottom: 0; left: 0; width: 256px; height: 256px; background: linear-gradient(45deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%); border-radius: 0 100% 0 0;"></div>
+        <div class="position-absolute rounded-circle"
+            style="top: 0; right: 0; width: 256px; height: 256px; background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, transparent 100%); border-radius: 0 0 0 100%;">
+        </div>
+        <div class="position-absolute rounded-circle"
+            style="bottom: 0; left: 0; width: 256px; height: 256px; background: linear-gradient(45deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%); border-radius: 0 100% 0 0;">
+        </div>
     </div>
 </div>

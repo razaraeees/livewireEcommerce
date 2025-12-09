@@ -47,11 +47,10 @@ return new class extends Migration
             $table->string('payment_method')->nullable();
             $table->string('payment_gateway')->nullable();
             $table->enum('payment_status', [
-                'pending',
+                'unpaid',
                 'paid',
-                'failed',
-                'refunded'
-            ])->default('pending')->index();
+                'failed'
+            ])->default('unpaid')->index();
             $table->string('transaction_id')->nullable()->index();
             
             $table->string('courier_name')->nullable();

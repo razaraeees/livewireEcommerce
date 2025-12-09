@@ -84,7 +84,7 @@
 
                     </a>
                     <div class="dropdown-menu dropdown-menu-end w-100">
-                        <a class="dropdown-item" href="#">My Profile</a>
+                        <a class="dropdown-item" href="{{ route('admin.profile-index') }}">My Profile</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button class="dropdown-item" type="submit">Logout</button>

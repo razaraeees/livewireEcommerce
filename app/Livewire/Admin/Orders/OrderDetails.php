@@ -13,6 +13,7 @@ class OrderDetails extends Component
     public $orderItems;
     public $statusHistories;
     public $selectedStatus;
+    public $paymentStatus;
     public $notes;
 
     public function mount($id)
@@ -28,6 +29,7 @@ class OrderDetails extends Component
 
         $this->orderItems = $this->order->items;
         $this->selectedStatus = $this->order->status;
+        $this->paymentStatus  = $this->order->payment_status;
         $this->notes = $this->order->notes;
 
         // Load status histories
@@ -36,10 +38,23 @@ class OrderDetails extends Component
             ->get();
     }
 
+    public function updatePaymentStatus()
+    {
+        $this->validate([
+            'paymentStatus' => 'required|in:paid,unpaid',
+        ]);
+
+        $this->order->update([
+            'payment_status' => $this->paymentStatus,
+        ]);
+
+        $this->dispatch('show-toast', type: 'success', message: 'Payment status updated successfully!');
+    }
+
     public function updateStatus()
     {
         $this->validate([
-            'selectedStatus' => 'required|in:pending,processing,completed,cancelled',
+            'selectedStatus' => 'required|in:pending,processing,completed,cancelled,delivered,refund',
         ]);
 
         // Update order status

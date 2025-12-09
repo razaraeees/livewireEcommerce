@@ -8,7 +8,10 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dashboard - Glowing - Bootstrap 5 HTML Templates</title>
-    <link rel="icon" href="{{ asset('assets/images/others/favicon.ico') }}">
+    @php $settings = siteSetting(); @endphp
+    <link rel="icon"
+      href="{{ $settings && $settings->favicon ? asset('storage/' . $settings->favicon) : asset('assets/images/default-favicon.png') }}">
+
 
     <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/owncustom.css') }}">

@@ -2,11 +2,17 @@
     <aside class="navbar navbar-expand-xl navbar-light d-block px-0 header-sticky dashboard-nav py-0">
         <div class="sticky-area border-right">
             <div class="d-flex px-6 px-xl-10 w-100 border-bottom py-7 justify-content-between">
-                <a href="../index-2.html" class="navbar-brand py-4">
-                    <img class="light-mode-img" src="{{ asset('assets/images/others/logo.png') }}" width="179"
-                        height="26" alt="Glowing - Bootstrap 5 HTML Templates">
-                    <img class="dark-mode-img" src="{{ asset('assets/images/others/logo-white.png') }}" width="179"
-                        height="26" alt="Glowing - Bootstrap 5 HTML Templates"></a>
+                <a href="{{ route('admin.dashboard') }}" class="navbar-brand py-4">
+                    @if (siteSetting() && siteSetting()->admin_logo)
+                        <img id="sidebar-admin-logo" src="{{ asset('storage/' . siteSetting()->admin_logo) }}"
+                            alt="Admin Logo" style="height:60px; max-width:180px; object-fit:contain;">
+                    @else
+                        <img id="sidebar-admin-logo" src="{{ asset('assets/images/others/logo.png') }}"
+                            alt="Default Logo" style="height:60px; max-width:180px; object-fit:contain;">
+                    @endif
+                </a>
+
+
 
                 <div class="ml-auto d-flex align-items-center ">
                     <div class="d-flex align-items-center d-xl-none">
@@ -216,7 +222,7 @@
                         <a href="#add_product"
                             class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
                             data-bs-toggle="collapse" aria-expanded="false" title="Add Product">
-                             <span class="sidebar-item-icon w-40px d-inline-block text-muted">
+                            <span class="sidebar-item-icon w-40px d-inline-block text-muted">
                                 <i class="fas fa-comment-alt"></i>
                             </span>
                             <span class="sidebar-item-text fs-14px fw-semibold">Product Review</span>
@@ -299,7 +305,8 @@
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="{{ route('admin.page-content') }}" title="User registration">Pages Content</a>
+                                        href="{{ route('admin.page-content') }}" title="User registration">Pages
+                                        Content</a>
                                 </li>
                             </ul>
                         </div>
@@ -325,19 +332,23 @@
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="{{ route('admin.site-setting') }}" title="Site settings">Site settings</a>
+                                        href="{{ route('admin.site-setting') }}" title="Site settings">Site
+                                        settings</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="{{ route('admin.general-setting') }}" title="Site settings">General settings</a>
+                                        href="{{ route('admin.general-setting') }}" title="Site settings">General
+                                        settings</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="{{ route('admin.shipping-setting') }}" title="Site settings">Shipping settings</a>
+                                        href="{{ route('admin.shipping-setting') }}" title="Site settings">Shipping
+                                        settings</a>
                                 </li>
-                                  <li class="sidebar-item">
+                                <li class="sidebar-item">
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
-                                        href="{{ route('admin.profile-index') }}" title="Site settings">Profile settings</a>
+                                        href="{{ route('admin.profile-index') }}" title="Site settings">Profile
+                                        settings</a>
                                 </li>
                             </ul>
                         </div>

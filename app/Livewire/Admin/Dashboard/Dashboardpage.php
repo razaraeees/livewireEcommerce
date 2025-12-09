@@ -85,34 +85,44 @@ class Dashboardpage extends Component
             ->sum('grand_total') ?? 0;
 
         // Log for debugging
-        Log::info('📤 Dispatching chart data', [
-            'labels_count' => count($chartLabels),
-            'sales_count' => count($salesChartData),
-            'orders_count' => count($visitorsChartData),
-            'revenue' => $revenue
-        ]);
+        // Log::info('📤 Dispatching chart data', [
+        //     'labels_count' => count($chartLabels),
+        //     'sales_count' => count($salesChartData),
+        //     'orders_count' => count($visitorsChartData),
+        //     'revenue' => $revenue
+        // ]);
+
+        // Calculate new metrics
+        $delivered = Order::whereBetween('created_at', $this->getDateRange())->where('status', 'delivered')->count();
+        $refunded = Order::whereBetween('created_at', $this->getDateRange())->where('status', 'refund')->count();
+        $completed = Order::whereBetween('created_at', $this->getDateRange())->where('status', 'completed')->count();
 
         // TRIPLE DISPATCH for maximum compatibility
-        
+
         // 1. Standard Livewire dispatch
-        $this->dispatch('refreshCharts', 
+        $this->dispatch(
+            'refreshCharts',
             labels: $chartLabels,
             salesData: $salesChartData,
             ordersData: $visitorsChartData,
-            paidRevenue: $monthlyEarning,
-            totalRevenue: $revenue
+            totalRevenue: $revenue,
+            delivered: $delivered,
+            refunded: $refunded,
+            completed: $completed
         );
 
         // 2. JavaScript eval dispatch (guaranteed to work)
         $this->js("
-            console.log('🚀 JS DISPATCH TRIGGERED');
+
             if (typeof updateCharts === 'function') {
                 updateCharts(
                     " . json_encode($chartLabels) . ",
                     " . json_encode($salesChartData) . ",
                     " . json_encode($visitorsChartData) . ",
-                    {$monthlyEarning},
-                    {$revenue}
+                    {$revenue},
+                    {$delivered},
+                    {$refunded},
+                    {$completed}
                 );
             }
             
@@ -122,8 +132,10 @@ class Dashboardpage extends Component
                     labels: " . json_encode($chartLabels) . ",
                     salesData: " . json_encode($salesChartData) . ",
                     ordersData: " . json_encode($visitorsChartData) . ",
-                    paidRevenue: {$monthlyEarning},
-                    totalRevenue: {$revenue}
+                    totalRevenue: {$revenue},
+                    delivered: {$delivered},
+                    refunded: {$refunded},
+                    completed: {$completed}
                 }
             }));
         ");
@@ -193,11 +205,29 @@ class Dashboardpage extends Component
             ->take(10)
             ->get();
 
+        // Delivered orders count
+        $deliveredOrdersCount = Order::whereBetween('created_at', $this->getDateRange())
+            ->where('status', 'delivered')
+            ->count();
+
+        // Refunded categories count
+        $refundedOrdersCount = Order::whereBetween('created_at', $this->getDateRange())
+            ->where('status', 'refund')
+            ->count();
+
+        // Completed orders count
+        $completedOrdersCount = Order::whereBetween('created_at', $this->getDateRange())
+            ->where('status', 'completed')
+            ->count();
+
         return view('livewire.admin.dashboard.dashboardpage', [
             'revenue' => $revenue,
             'ordersCount' => $ordersCount,
             'productsCount' => $productsCount,
             'monthlyEarning' => $monthlyEarning,
+            'deliveredOrdersCount' => $deliveredOrdersCount,
+            'refundedOrdersCount' => $refundedOrdersCount,
+            'completedOrdersCount' => $completedOrdersCount,
             'chartLabels' => $chartLabels,
             'salesChartData' => $salesChartData,
             'visitorsChartData' => $visitorsChartData,

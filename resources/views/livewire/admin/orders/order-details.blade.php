@@ -19,20 +19,36 @@
                         <small class="text-muted">Order ID: {{ $order->order_number }}</small>
                     </div>
                     <div class="col-md-6 ml-auto d-flex justify-content-md-end flex-wrap">
-                        <div class="mw-210 me-5 my-3">
-                            <select class="form-select" wire:model="selectedStatus">
-                                <option value="">Change status</option>
-                                <option value="pending">Pending</option>
-                                <option value="processing">Processing</option>
-                                <option value="completed">Completed</option>
-                                <option value="cancelled">Cancelled</option>
-                            </select>
-                        </div>
-                        <button wire:click="updateStatus" class="btn btn-primary my-3">Save</button>
-                        <a class="btn btn-dark print ms-5 my-3" href="#" onclick="window.print()">
-                            <i class="far fa-print"></i>
-                        </a>
+
+                    {{-- Payment status (PAID / UNPAID) --}}
+                    <div class="mw-210 me-5 my-3">
+                        <select class="form-select" wire:model="paymentStatus" wire:change="updatePaymentStatus">
+                            <option value="">Payment status</option>
+                            <option value="paid">Paid</option>
+                            <option value="unpaid">Unpaid</option>
+                        </select>
                     </div>
+
+                    {{-- Order status (pending / delivered ...) --}}
+                    <div class="mw-210 me-5 my-3">
+                        <select class="form-select" wire:model="selectedStatus" >
+                            <option value="">Change status</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="refund">Refund</option>
+                        </select>
+                    </div>
+
+                    <button wire:click="updateStatus" class="btn btn-primary my-3">Save</button>
+
+                    <a class="btn btn-dark print ms-5 my-3" href="#" onclick="window.print()">
+                        <i class="far fa-print"></i>
+                    </a>
+</div>
+
                 </div>
             </header>
 
@@ -186,6 +202,22 @@
                                                         <span class="d-inline-block w-50">Grand total:</span>
                                                         <span class="d-inline-block w-50 text-end fs-5 fw-semibold">
                                                             ${{ number_format($order->grand_total, 2) }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="d-flex w-100">
+                                                        <span class="d-inline-block w-50 text-muted">Payment Status:</span>
+                                                        <span class="d-inline-block w-50 text-end fs-20 fw-semibold">
+                                                            @php
+                                                                $statuspayment = match ($order->payment_status) {
+                                                                    'unpaid' => 'alert-warning text-warning',
+                                                                    'paid' => 'alert-success text-success',
+                                                                    default => 'alert-secondary text-secondary',
+                                                                };
+                                                            @endphp
+                                                            <span
+                                                                class="badge rounded-pill alert {{ $statuspayment }} fs-12px px-4 py-3 text-capitalize">
+                                                                {{ $order->payment_status }}
+                                                            </span>
                                                         </span>
                                                     </div>
                                                     <div class="d-flex w-100">

@@ -14,12 +14,12 @@
                     <span>Filters</span>
                 </button>
 
-                <a href="#" class="btn btn-primary d-flex align-items-center mb-2 mb-md-0">
+                {{-- <a href="#" class="btn btn-primary d-flex align-items-center mb-2 mb-md-0">
                     <svg class="icon" style="width: 16px; height: 16px;">
                         <use xlink:href="#file-plus"></use>
                     </svg>
                     <span class="ms-2">Create report</span>
-                </a>
+                </a> --}}
             </div>
         </div>
 
@@ -29,7 +29,7 @@
                 subtitle="Based on selected date range" icon='<i class="fas fa-dollar-sign"></i>' textColor="text-green"
                 bgColor="bg-green-light" />
 
-            <livewire:admin.dashboard.stats-card :key="'orders-' . $dateFrom . '-' . $dateTo" title="Orders" :value="$ordersCount"
+            <livewire:admin.dashboard.stats-card :key="'orders-' . $dateFrom . '-' . $dateTo" title="Total Orders" :value="$ordersCount"
                 subtitle="Total orders in date range" icon='<i class="fas fa-truck"></i>' textColor="text-success"
                 bgColor="bg-success-light" />
 
@@ -48,7 +48,7 @@
             <div class="col-xl-8 mb-4">
                 <div class="card rounded-4 p-7">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="card-title fs-6 mb-0">Sales & Orders Trends</h5>
+                        <h5 class="card-title fs-6 mb-0">Sales & Orders</h5>
                         <span class="badge bg-primary">{{ $dateFrom }} to {{ $dateTo }}</span>
                     </div>
                     <div class="card-body p-0" wire:ignore>

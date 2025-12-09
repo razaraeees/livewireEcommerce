@@ -107,6 +107,18 @@
             });
         });
     </script>
+    @if(session('toast'))
+    <script>
+    Swal.fire({
+        toast: true,
+        icon: "{{ session('toast.type') }}",
+        title: "{{ session('toast.message') }}",
+        position: 'top-end',
+        timer: 3000,
+        showConfirmButton: false
+    });
+    </script>
+    @endif
 
 
 

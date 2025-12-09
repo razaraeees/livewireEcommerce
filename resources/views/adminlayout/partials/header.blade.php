@@ -63,49 +63,47 @@
                         </li>
                     </ul>
                 </div>
-                <div class="dropdown no-caret px-4 mx-3 py-2">
-                    <a href="#"
-                        class="dropdown-toggle fs-5 text-decoration-none fw-500 lh-1 animation-shake position-relative"
-                        data-bs-toggle="dropdown">
-                        <i class="far fa-bell"></i>
-                        <span class="badge text-bg-dark rounded-circle">4</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-                <a href="#" class="request-full-screen d-block px-4 mx-3 fs-5" title="Full screen">
-                    <i class="far fa-rss-square"></i>
-                </a>
-                <div class="dropdown px-4 mx-3 py-2 dropdown-language">
-                    <a href="#" class="dropdown-toggle fs-5" data-bs-toggle="dropdown"><i
-                            class="far fa-globe-americas"></i></a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item text-brand" href="#"><img
-                                src="{{ asset('assets/images/dashboard/flag-us.png') }}" alt="English">English</a>
-                        <a class="dropdown-item" href="#"><img
-                                src="{{ asset('assets/images/dashboard/flag-fr.png') }}" alt="Français">Français</a>
-                        <a class="dropdown-item" href="#"><img
-                                src="{{ asset('assets/images/dashboard/flag-jp.png') }}" alt="Français">Français</a>
-                        <a class="dropdown-item" href="#"><img
-                                src="{{ asset('assets/images/dashboard/flag-cn.png') }}" alt="Français">Français</a>
-                    </div>
-                </div>
                 <div class="dropdown pl-2 py-2">
                     <a href="#"
                         class="dropdown-toggle text-heading pr-3 pr-sm-6 d-flex align-items-center justify-content-end"
                         data-bs-toggle="dropdown">
-                        <img src="{{ asset('assets/images/dashboard/avatar-2.png') }}" alt="Ronald Hunter"
-                            class="rounded-circle" width="40">
+                        @if(Auth::user()->image)
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}"
+                                alt="{{ Auth::user()->name }}"
+                                id="header-profile-image"
+                                class="rounded-circle"
+                                style="width:40px; height:40px; object-fit:cover;">
+                        @else
+                            <!-- Default User Icon -->
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                                id="header-profile-image"
+                                style="width: 40px; height: 40px;">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                        @endif
+
                     </a>
                     <div class="dropdown-menu dropdown-menu-end w-100">
                         <a class="dropdown-item" href="#">My Profile</a>
-                        <a class="dropdown-item" href="#">Logout</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="dropdown-item" type="submit">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </nav>
     </div>
 </header>
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:init', () => {  
+            Livewire.on('profile-image-updated', (event) => {
+                const headerImg = document.getElementById('header-profile-image');
+                if (headerImg) {
+                    headerImg.src = `/storage/${event.image}?t=${Date.now()}`;
+                }
+            });
+        });
+    </script>
+@endpush

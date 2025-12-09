@@ -335,6 +335,10 @@
                                     <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
                                         href="{{ route('admin.shipping-setting') }}" title="Site settings">Shipping settings</a>
                                 </li>
+                                  <li class="sidebar-item">
+                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold"
+                                        href="{{ route('admin.profile-index') }}" title="Site settings">Profile settings</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
